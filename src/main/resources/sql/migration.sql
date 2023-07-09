@@ -13,9 +13,9 @@ CREATE SEQUENCE SEQ_ROLES START WITH 1;
 
 --changeset rakhimbaev:changeset-1
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
---precondition-sql-check expectedResult:0 select count(*) from roles where upper(name) = 'ADMIN';
---precondition-sql-check expectedResult:0 select count(*) from roles where upper(name) = 'BI_MANAGER';
---precondition-sql-check expectedResult:0 select count(*) from roles where upper(name) = 'USER';
+--precondition-sql-check expectedResult:0 select count(*) from roles where upper(name) = 'ROLE_ADMIN';
+--precondition-sql-check expectedResult:0 select count(*) from roles where upper(name) = 'ROLE_BI_MANAGER';
+--precondition-sql-check expectedResult:0 select count(*) from roles where upper(name) = 'ROLE_USER';
 INSERT INTO ROLES(ID, NAME) VALUES (nextval('SEQ_ROLES'), 'ROLE_ADMIN');
 INSERT INTO ROLES(ID, NAME) VALUES (nextval('SEQ_ROLES'), 'ROLE_BI_MANAGER');
 INSERT INTO ROLES(ID, NAME) VALUES (nextval('SEQ_ROLES'), 'ROLE_USER');
