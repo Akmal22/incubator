@@ -11,17 +11,19 @@ import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
-import com.vaadin.flow.component.textfield.TextField;
+import com.vaadin.flow.component.textfield.PasswordField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import com.vaadin.flow.data.binder.ValidationException;
 
+import static org.apache.commons.lang3.StringUtils.isNotBlank;
+
 public class ChangePasswordDialog extends Dialog {
     private final UserService userService;
 
-    TextField newPassword = new TextField("New password");
-    TextField repeatPassword = new TextField("Repeat password");
-    TextField currentPassword = new TextField("Current password");
+    PasswordField newPassword = new PasswordField("New password");
+    PasswordField repeatPassword = new PasswordField("Repeat password");
+    PasswordField currentPassword = new PasswordField("Current password");
     Label errorMessageLabel = new Label();
 
     public ChangePasswordDialog(UserService userService) {
@@ -48,6 +50,11 @@ public class ChangePasswordDialog extends Dialog {
         Binder<ChangePasswordForm> binder = new BeanValidationBinder<>(ChangePasswordForm.class);
         binder.setBean(new ChangePasswordForm());
         binder.bindInstanceFields(this);
+
+        binder.forField(repeatPassword)
+                .withValidator(repeatPasswordValue -> isNotBlank(repeatPasswordValue) && repeatPasswordValue.equals(newPassword.getValue()),
+                        "Passwords are not same")
+                .bind(ChangePasswordForm::getRepeatPassword, ChangePasswordForm::setRepeatPassword);
 
         binder.addStatusChangeListener(e -> saveButton.setEnabled(binder.isValid()));
         saveButton.addClickListener(e -> validateAndSave(binder, errorMessageLabel));
