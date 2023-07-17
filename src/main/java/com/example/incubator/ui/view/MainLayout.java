@@ -1,10 +1,17 @@
 package com.example.incubator.ui.view;
 
-
 import com.example.incubator.back.entity.Role;
+import com.example.incubator.back.service.UserService;
+import com.example.incubator.back.service.security.SecurityService;
+import com.example.incubator.ui.view.security.ChangePasswordDialog;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
+import com.vaadin.flow.component.avatar.Avatar;
+import com.vaadin.flow.component.contextmenu.MenuItem;
+import com.vaadin.flow.component.contextmenu.SubMenu;
 import com.vaadin.flow.component.html.H1;
+import com.vaadin.flow.component.menubar.MenuBar;
+import com.vaadin.flow.component.menubar.MenuBarVariant;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
@@ -15,11 +22,20 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
+
 public class MainLayout extends AppLayout {
     private final String appName;
+    private final SecurityService securityService;
+    private final UserService userService;
 
-    public MainLayout(@Value("${app.name}") String appName, AuthenticationContext authenticationContext) {
+    public MainLayout(@Value("${app.name}") String appName,
+                      AuthenticationContext authenticationContext,
+                      SecurityService securityService,
+                      UserService userService
+    ) {
         this.appName = appName;
+        this.securityService = securityService;
+        this.userService = userService;
         createHeader();
         createDrawer(authenticationContext);
     }
@@ -31,8 +47,18 @@ public class MainLayout extends AppLayout {
                 LumoUtility.Margin.MEDIUM
         );
 
-        var header = new HorizontalLayout(new DrawerToggle(), logo);
+        String username = securityService.getAuthenticationContext().getUsername();
+        Avatar avatar = new Avatar(username);
+        MenuBar menuBar = new MenuBar();
+        menuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+        MenuItem menuItem = menuBar.addItem(avatar);
+        SubMenu subMenu = menuItem.getSubMenu();
+        MenuItem logoutMenuItem = subMenu.addItem("Log out");
+        MenuItem changePasswordMenuItem = subMenu.addItem("Change password");
+        changePasswordMenuItem.addClickListener(e -> this.changePasswordListener());
+        logoutMenuItem.addClickListener(e -> securityService.logout());
 
+        var header = new HorizontalLayout(new DrawerToggle(), logo, menuBar);
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(logo);
         header.setWidthFull();
@@ -42,6 +68,11 @@ public class MainLayout extends AppLayout {
         );
 
         addToNavbar(header);
+    }
+
+    private void changePasswordListener() {
+        ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(userService);
+        changePasswordDialog.open();
     }
 
     private void createDrawer(AuthenticationContext authenticationContext) {
@@ -63,6 +94,5 @@ public class MainLayout extends AppLayout {
                     new RouterLink("Добавить информацию", FullReportView.class)
             ));
         }
-
     }
 }
