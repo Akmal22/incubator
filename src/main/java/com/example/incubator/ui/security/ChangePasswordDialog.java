@@ -1,12 +1,13 @@
-package com.example.incubator.ui.view.security;
+package com.example.incubator.ui.security;
 
 
 import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.dto.ChangePasswordDto;
 import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.ui.dto.ChangePasswordForm;
+import com.example.incubator.ui.form.ChangePasswordForm;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
+import com.vaadin.flow.component.button.ButtonVariant;
 import com.vaadin.flow.component.dialog.Dialog;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.FlexComponent;
@@ -34,6 +35,9 @@ public class ChangePasswordDialog extends Dialog {
 
         Button saveButton = new Button("Save");
         Button closeButton = new Button("Close");
+
+        saveButton.addThemeVariants(ButtonVariant.LUMO_PRIMARY);
+        closeButton.addThemeVariants(ButtonVariant.LUMO_TERTIARY);
 
         saveButton.addClickShortcut(Key.ENTER);
         closeButton.addClickShortcut(Key.ESCAPE);

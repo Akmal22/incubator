@@ -1,9 +1,13 @@
-package com.example.incubator.ui.view;
+package com.example.incubator.ui;
 
 import com.example.incubator.back.entity.Role;
 import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.security.SecurityService;
-import com.example.incubator.ui.view.security.ChangePasswordDialog;
+import com.example.incubator.ui.security.ChangePasswordDialog;
+import com.example.incubator.ui.view.AboutUsView;
+import com.example.incubator.ui.view.AddDataView;
+import com.example.incubator.ui.view.ReportView;
+import com.example.incubator.ui.view.UsersView;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -47,18 +51,7 @@ public class MainLayout extends AppLayout {
                 LumoUtility.Margin.MEDIUM
         );
 
-        String username = securityService.getAuthenticationContext().getUsername();
-        Avatar avatar = new Avatar(username);
-        MenuBar menuBar = new MenuBar();
-        menuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
-        MenuItem menuItem = menuBar.addItem(avatar);
-        SubMenu subMenu = menuItem.getSubMenu();
-        MenuItem logoutMenuItem = subMenu.addItem("Log out");
-        MenuItem changePasswordMenuItem = subMenu.addItem("Change password");
-        changePasswordMenuItem.addClickListener(e -> this.changePasswordListener());
-        logoutMenuItem.addClickListener(e -> securityService.logout());
-
-        var header = new HorizontalLayout(new DrawerToggle(), logo, menuBar);
+        var header = new HorizontalLayout(new DrawerToggle(), logo, getUserActionMenuBar());
         header.setDefaultVerticalComponentAlignment(FlexComponent.Alignment.CENTER);
         header.expand(logo);
         header.setWidthFull();
@@ -70,6 +63,22 @@ public class MainLayout extends AppLayout {
         addToNavbar(header);
     }
 
+    private MenuBar getUserActionMenuBar() {
+        String username = securityService.getAuthenticationContext().getUsername();
+        Avatar avatar = new Avatar(username);
+        MenuBar menuBar = new MenuBar();
+        menuBar.addThemeVariants(MenuBarVariant.LUMO_TERTIARY_INLINE);
+        MenuItem menuItem = menuBar.addItem(avatar);
+        SubMenu subMenu = menuItem.getSubMenu();
+        MenuItem changePasswordMenuItem = subMenu.addItem("Change password");
+        MenuItem logoutMenuItem = subMenu.addItem("Log out");
+        changePasswordMenuItem.addClickListener(e -> this.changePasswordListener());
+        logoutMenuItem.addClickListener(e -> securityService.logout());
+
+        return menuBar;
+    }
+
+
     private void changePasswordListener() {
         ChangePasswordDialog changePasswordDialog = new ChangePasswordDialog(userService);
         changePasswordDialog.open();
@@ -78,20 +87,26 @@ public class MainLayout extends AppLayout {
     private void createDrawer(AuthenticationContext authenticationContext) {
         UserDetails optionalUserDetails = authenticationContext.getAuthenticatedUser(UserDetails.class)
                 .orElseThrow(() -> new RuntimeException("Error"));
+        if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()))) {
+            addToDrawer(new VerticalLayout(
+                    new RouterLink("Report", ReportView.class),
+                    new RouterLink("Users", UsersView.class),
+                    new RouterLink("Add Data", AddDataView.class),
+                    new RouterLink("About", AboutUsView.class)
+            ));
+        }
+        if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
+            addToDrawer(new VerticalLayout(
+                    new RouterLink("Report", ReportView.class),
+                    new RouterLink("Add Data", AddDataView.class),
+                    new RouterLink("About", AboutUsView.class)
+            ));
+        }
+
         if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_USER.name()))) {
             addToDrawer(new VerticalLayout(
-                    new RouterLink("Главная", MainView.class),
-                    new RouterLink("Краткий отчет", ShortReportView.class),
-                    new RouterLink("Полный отчет", FullReportView.class),
-                    new RouterLink("Добавить информацию", FullReportView.class),
-                    new RouterLink("О нас", AboutUsView.class)
-            ));
-        } else {
-            addToDrawer(new VerticalLayout(
-                    new RouterLink("Главная", MainView.class),
-                    new RouterLink("Краткий отчет", ShortReportView.class),
-                    new RouterLink("Полный отчет", FullReportView.class),
-                    new RouterLink("Добавить информацию", FullReportView.class)
+                    new RouterLink("Report", ReportView.class),
+                    new RouterLink("About", AboutUsView.class)
             ));
         }
     }
