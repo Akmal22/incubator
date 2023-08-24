@@ -5,7 +5,7 @@ import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.security.SecurityService;
 import com.example.incubator.ui.security.ChangePasswordDialog;
 import com.example.incubator.ui.view.AboutUsView;
-import com.example.incubator.ui.view.AddDataView;
+import com.example.incubator.ui.view.DataView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
 import com.vaadin.flow.component.applayout.AppLayout;
@@ -91,14 +91,14 @@ public class MainLayout extends AppLayout {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
                     new RouterLink("Users", UsersView.class),
-                    new RouterLink("Add Data", AddDataView.class),
+                    new RouterLink("Data", DataView.class),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
         if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
-                    new RouterLink("Add Data", AddDataView.class),
+                    new RouterLink("Data", DataView.class),
                     new RouterLink("About", AboutUsView.class)
             ));
         }

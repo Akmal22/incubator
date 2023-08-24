@@ -29,6 +29,11 @@
             <artifactId>spring-boot-starter-security</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.vaadin</groupId>
+            <artifactId>vaadin-charts-flow</artifactId>
+        </dependency>
+
         <!--DB-->
         <dependency>
             <groupId>org.springframework.boot</groupId>

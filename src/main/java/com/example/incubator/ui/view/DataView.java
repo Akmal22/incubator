@@ -10,5 +10,6 @@ import jakarta.annotation.security.RolesAllowed;
 @RolesAllowed({"ADMIN", "BI_MANAGER"})
 @Route(value = "data", layout = MainLayout.class)
 @PageTitle("Добавить информацию")
-public class AddDataView extends VerticalLayout {
+public class DataView extends VerticalLayout {
+
 }
