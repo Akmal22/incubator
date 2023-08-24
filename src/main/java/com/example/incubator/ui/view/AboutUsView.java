@@ -1,13 +1,17 @@
 package com.example.incubator.ui.view;
 
 import com.example.incubator.ui.MainLayout;
+import com.vaadin.flow.component.html.Span;
 import com.vaadin.flow.component.orderedlayout.VerticalLayout;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
-import jakarta.annotation.security.RolesAllowed;
+import jakarta.annotation.security.PermitAll;
 
-@RolesAllowed({"USER","ADMIN","BI_MANAGER"})
+@PermitAll
 @Route(value = "about", layout = MainLayout.class)
 @PageTitle("About")
 public class AboutUsView extends VerticalLayout {
+    public AboutUsView() {
+        add(new Span("Text about BIA Business Incubator Analyzer"));
+    }
 }
