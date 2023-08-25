@@ -1,7 +1,7 @@
 package com.example.incubator.ui.form;
 
 import com.example.incubator.back.entity.user.Role;
-import com.example.incubator.back.service.dto.EditUserDto;
+import com.example.incubator.back.service.dto.form.user.EditUserDto;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -80,10 +80,9 @@ public class UserForm extends FormLayout {
         addListener(DeleteEvent.class, listener);
     }
 
-    public void addCloseEditor(ComponentEventListener<CloseEvent> listener) {
+    public void addCloseEditorListener(ComponentEventListener<CloseEvent> listener) {
         addListener(CloseEvent.class, listener);
     }
-
 
     // Event classes
     public static abstract class UserFormEvent extends ComponentEvent<UserForm> {

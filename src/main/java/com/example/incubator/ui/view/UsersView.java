@@ -1,7 +1,7 @@
 package com.example.incubator.ui.view;
 
 import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.EditUserDto;
+import com.example.incubator.back.service.dto.form.user.EditUserDto;
 import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.UserForm;
@@ -25,8 +25,8 @@ public class UsersView extends VerticalLayout {
     private final UserService userService;
 
     private UserForm userForm;
-    Grid<EditUserDto> usersGrid = new Grid<>(EditUserDto.class);
-    TextField filterText = new TextField();
+    private Grid<EditUserDto> usersGrid;
+    private TextField filterText;
 
     public UsersView(UserService userService) {
         this.userService = userService;
@@ -34,7 +34,7 @@ public class UsersView extends VerticalLayout {
         addClassName("list-view");
         setSizeFull();
         configureGrid();
-        configureUsersGrid();
+        configureUserForm();
 
         add(getToolBar(), getContent());
 
@@ -43,7 +43,7 @@ public class UsersView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolBar() {
-
+        filterText = new TextField();
         filterText.setPlaceholder("Filter user by name or email ...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
@@ -68,23 +68,23 @@ public class UsersView extends VerticalLayout {
     }
 
     private void configureGrid() {
+        usersGrid = new Grid<>(EditUserDto.class);
         usersGrid.addClassName("contact-grid");
         usersGrid.setSizeFull();
         usersGrid.setColumns("username");
         usersGrid.addColumn(editUserDto -> editUserDto.getRole().getName()).setHeader("Role");
 
         usersGrid.getColumns().forEach(col -> col.setAutoWidth(true));
-
         usersGrid.asSingleSelect().addValueChangeListener(event -> editUser(event.getValue(), true));
     }
 
-    private void configureUsersGrid() {
+    private void configureUserForm() {
         userForm = new UserForm();
 
         userForm.setWidth("25em");
         userForm.addSaveListener(this::saveUser);
         userForm.addDeleteListener(this::deleteUser);
-        userForm.addCloseEditor(e -> closeEditor());
+        userForm.addCloseEditorListener(e -> closeEditor());
     }
 
     private void saveUser(UserForm.SaveEvent event) {
@@ -95,7 +95,6 @@ public class UsersView extends VerticalLayout {
         } else {
             serviceResult = userService.updateUser(editUserDto);
         }
-
 
         if (!serviceResult.isSuccess()) {
             userForm.getErrorMessageLabel().setEnabled(!serviceResult.isSuccess());

@@ -1,4 +1,4 @@
-package com.example.incubator.back.service.dto;
+package com.example.incubator.back.service.dto.form.user;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

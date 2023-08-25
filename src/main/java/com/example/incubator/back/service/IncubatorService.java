@@ -6,8 +6,8 @@ import com.example.incubator.back.entity.data.IncubatorProjectEntity;
 import com.example.incubator.back.repo.CountryRepository;
 import com.example.incubator.back.repo.IncubatorProjectRepository;
 import com.example.incubator.back.repo.IncubatorRepository;
-import com.example.incubator.back.service.dto.IncubatorDto;
-import com.example.incubator.back.service.dto.IncubatorProjectDto;
+import com.example.incubator.back.service.dto.incubator.IncubatorDto;
+import com.example.incubator.back.service.dto.incubator.IncubatorProjectDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -22,12 +22,6 @@ public class IncubatorService {
     private final CountryRepository countryRepository;
     private final IncubatorRepository incubatorRepository;
     private final IncubatorProjectRepository incubatorProjectRepository;
-
-    public List<String> getCountryNames() {
-        return countryRepository.findAll().stream()
-                .map(CountryEntity::getName)
-                .collect(Collectors.toList());
-    }
 
     public List<String> getIncubatorNamesByCountry(String countryName) {
         CountryEntity country = countryRepository.findByName(countryName).orElseThrow(() -> new IllegalArgumentException("Country not found"));

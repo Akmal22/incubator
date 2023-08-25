@@ -1,4 +1,4 @@
-package com.example.incubator.back.service.dto;
+package com.example.incubator.back.service.dto.user;
 
 import com.example.incubator.back.entity.user.UserEntity;
 import lombok.Getter;

@@ -5,9 +5,9 @@ import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.security.SecurityService;
 import com.example.incubator.ui.security.ChangePasswordDialog;
 import com.example.incubator.ui.view.AboutUsView;
-import com.example.incubator.ui.view.data.CountriesView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
+import com.example.incubator.ui.view.data.CountriesView;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -113,9 +113,19 @@ public class MainLayout extends AppLayout {
     }
 
     private Accordion getDataEditView(AuthenticationContext authenticationContext) {
+        UserDetails optionalUserDetails = authenticationContext.getAuthenticatedUser(UserDetails.class)
+                .orElseThrow(() -> new RuntimeException("Error"));
+
         Accordion accordion = new Accordion();
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.add(new RouterLink("Data", CountriesView.class));
+
+        if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()))) {
+            verticalLayout.add(new RouterLink("Countries", CountriesView.class));
+        }
+
+        if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
+
+        }
         accordion.add("Data", verticalLayout);
 
         return accordion;

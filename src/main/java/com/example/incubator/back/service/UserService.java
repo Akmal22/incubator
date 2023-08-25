@@ -2,10 +2,10 @@ package com.example.incubator.back.service;
 
 import com.example.incubator.back.entity.user.UserEntity;
 import com.example.incubator.back.repo.UserRepository;
-import com.example.incubator.back.service.dto.ChangePasswordDto;
-import com.example.incubator.back.service.dto.EditUserDto;
+import com.example.incubator.back.service.dto.form.user.ChangePasswordDto;
+import com.example.incubator.back.service.dto.form.user.EditUserDto;
 import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.back.service.dto.UserCredentials;
+import com.example.incubator.back.service.dto.user.UserCredentials;
 import com.example.incubator.back.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
