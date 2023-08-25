@@ -1,6 +1,6 @@
 package com.example.incubator.back.service.dto;
 
-import com.example.incubator.back.entity.Role;
+import com.example.incubator.back.entity.user.Role;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

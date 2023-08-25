@@ -1,8 +1,8 @@
 package com.example.incubator.back.service;
 
-import com.example.incubator.back.entity.CountryEntity;
-import com.example.incubator.back.entity.IncubatorEntity;
-import com.example.incubator.back.entity.IncubatorProjectEntity;
+import com.example.incubator.back.entity.data.CountryEntity;
+import com.example.incubator.back.entity.data.IncubatorEntity;
+import com.example.incubator.back.entity.data.IncubatorProjectEntity;
 import com.example.incubator.back.repo.CountryRepository;
 import com.example.incubator.back.repo.IncubatorProjectRepository;
 import com.example.incubator.back.repo.IncubatorRepository;

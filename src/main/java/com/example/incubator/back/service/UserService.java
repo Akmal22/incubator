@@ -1,6 +1,6 @@
 package com.example.incubator.back.service;
 
-import com.example.incubator.back.entity.UserEntity;
+import com.example.incubator.back.entity.user.UserEntity;
 import com.example.incubator.back.repo.UserRepository;
 import com.example.incubator.back.service.dto.ChangePasswordDto;
 import com.example.incubator.back.service.dto.EditUserDto;
