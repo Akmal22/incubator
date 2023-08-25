@@ -1,4 +1,4 @@
-package com.example.incubator.back.entity;
+package com.example.incubator.back.entity.user;
 
 public enum Role {
     ROLE_USER("User"),

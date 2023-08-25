@@ -1,13 +1,14 @@
 package com.example.incubator.ui;
 
-import com.example.incubator.back.entity.Role;
+import com.example.incubator.back.entity.user.Role;
 import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.security.SecurityService;
 import com.example.incubator.ui.security.ChangePasswordDialog;
 import com.example.incubator.ui.view.AboutUsView;
-import com.example.incubator.ui.view.DataView;
+import com.example.incubator.ui.view.data.CountriesView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
+import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
 import com.vaadin.flow.component.avatar.Avatar;
@@ -91,14 +92,14 @@ public class MainLayout extends AppLayout {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
                     new RouterLink("Users", UsersView.class),
-                    new RouterLink("Data", DataView.class),
+                    getDataEditView(authenticationContext),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
         if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
-                    new RouterLink("Data", DataView.class),
+                    getDataEditView(authenticationContext),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
@@ -109,5 +110,14 @@ public class MainLayout extends AppLayout {
                     new RouterLink("About", AboutUsView.class)
             ));
         }
+    }
+
+    private Accordion getDataEditView(AuthenticationContext authenticationContext) {
+        Accordion accordion = new Accordion();
+        VerticalLayout verticalLayout = new VerticalLayout();
+        verticalLayout.add(new RouterLink("Data", CountriesView.class));
+        accordion.add("Data", verticalLayout);
+
+        return accordion;
     }
 }

@@ -1,6 +1,6 @@
 package com.example.incubator.ui.form;
 
-import com.example.incubator.back.entity.Role;
+import com.example.incubator.back.entity.user.Role;
 import com.example.incubator.back.service.dto.EditUserDto;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

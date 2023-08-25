@@ -1,5 +1,6 @@
-package com.example.incubator.back.entity;
+package com.example.incubator.back.entity.data;
 
+import com.example.incubator.back.entity.user.UserEntity;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;

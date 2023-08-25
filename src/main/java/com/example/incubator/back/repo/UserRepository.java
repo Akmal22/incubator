@@ -1,7 +1,7 @@
 package com.example.incubator.back.repo;
 
-import com.example.incubator.back.entity.Role;
-import com.example.incubator.back.entity.UserEntity;
+import com.example.incubator.back.entity.user.Role;
+import com.example.incubator.back.entity.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
