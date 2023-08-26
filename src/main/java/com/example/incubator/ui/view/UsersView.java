@@ -1,8 +1,9 @@
 package com.example.incubator.ui.view;
 
 import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.form.user.EditUserDto;
 import com.example.incubator.back.service.dto.ServiceResult;
+import com.example.incubator.ui.dto.EditUserDto;
+import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.UserForm;
 import com.vaadin.flow.component.button.Button;
@@ -14,6 +15,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+
+import java.util.stream.Collectors;
 
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
@@ -91,9 +94,9 @@ public class UsersView extends VerticalLayout {
         EditUserDto editUserDto = event.getUserDto();
         ServiceResult serviceResult;
         if (isBlank(editUserDto.getUuid())) {
-            serviceResult = userService.createUser(editUserDto);
+            serviceResult = userService.createUser(convertEditUserDto(editUserDto));
         } else {
-            serviceResult = userService.updateUser(editUserDto);
+            serviceResult = userService.updateUser(convertEditUserDto(editUserDto));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -106,7 +109,7 @@ public class UsersView extends VerticalLayout {
     }
 
     private void deleteUser(UserForm.DeleteEvent event) {
-        userService.deleteUser(event.getUserDto());
+        userService.deleteUser(convertEditUserDto(event.getUserDto()));
         updateUserList();
         closeEditor();
     }
@@ -136,6 +139,28 @@ public class UsersView extends VerticalLayout {
     }
 
     private void updateUserList() {
-        usersGrid.setItems(userService.getAllUsers(filterText.getValue()));
+        usersGrid.setItems(userService.getAllUsers(filterText.getValue()).stream()
+                .map(this::convertUserDto)
+                .collect(Collectors.toList()));
+    }
+
+    private EditUserDto convertUserDto(UserDto userDto) {
+        EditUserDto editUserDto = new EditUserDto();
+        editUserDto.setUuid(userDto.getUuid());
+        editUserDto.setUsername(userDto.getUsername());
+        editUserDto.setEmail(userDto.getEmail());
+        editUserDto.setRole(userDto.getRole());
+
+        return editUserDto;
+    }
+
+    private UserDto convertEditUserDto(EditUserDto editUserDto) {
+        UserDto userDto = new UserDto();
+        userDto.setUuid(editUserDto.getUuid());
+        userDto.setUsername(editUserDto.getUsername());
+        userDto.setEmail(editUserDto.getEmail());
+        userDto.setRole(editUserDto.getRole());
+
+        return userDto;
     }
 }

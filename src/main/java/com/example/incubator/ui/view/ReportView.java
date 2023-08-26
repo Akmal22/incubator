@@ -1,10 +1,9 @@
 package com.example.incubator.ui.view;
 
 import com.example.incubator.back.service.CountriesService;
-import com.example.incubator.back.service.IncubatorService;
 import com.example.incubator.back.service.ReportService;
-import com.example.incubator.back.service.dto.incubator.IncubatorDto;
-import com.example.incubator.back.service.dto.incubator.IncubatorProjectDto;
+import com.example.incubator.back.service.dto.report.IncubatorDto;
+import com.example.incubator.back.service.dto.report.IncubatorProjectDto;
 import com.example.incubator.ui.MainLayout;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;

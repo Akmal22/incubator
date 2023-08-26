@@ -1,8 +1,9 @@
 package com.example.incubator.ui.view.data;
 
 import com.example.incubator.back.service.CountriesService;
-import com.example.incubator.back.service.dto.form.country.EditCountryDto;
 import com.example.incubator.back.service.dto.ServiceResult;
+import com.example.incubator.back.service.dto.country.CountryDto;
+import com.example.incubator.ui.dto.EditCountryDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.CountryForm;
 import com.vaadin.flow.component.button.Button;
@@ -14,6 +15,8 @@ import com.vaadin.flow.data.value.ValueChangeMode;
 import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
+
+import java.util.stream.Collectors;
 
 
 @RolesAllowed({"ADMIN"})
@@ -86,12 +89,12 @@ public class CountriesView extends VerticalLayout {
     }
 
     private void saveCountry(CountryForm.SaveEvent event) {
-        EditCountryDto editCountryDto = event.getUserDto();
+        EditCountryDto editCountryDto = event.getEditCountryDto();
         ServiceResult serviceResult;
         if (editCountryDto.getId() == null) {
-            serviceResult = countriesService.createCountry(editCountryDto);
+            serviceResult = countriesService.createCountry(convertEditCountryDto(editCountryDto));
         } else {
-            serviceResult = countriesService.updateCountry(editCountryDto);
+            serviceResult = countriesService.updateCountry(convertEditCountryDto(editCountryDto));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -104,7 +107,7 @@ public class CountriesView extends VerticalLayout {
     }
 
     private void deleteCountry(CountryForm.DeleteEvent event) {
-        countriesService.deleteCountry(event.getUserDto());
+        countriesService.deleteCountry(convertEditCountryDto(event.getEditCountryDto()));
         updateCountriesList();
         closeEditor();
     }
@@ -133,6 +136,24 @@ public class CountriesView extends VerticalLayout {
     }
 
     private void updateCountriesList() {
-        countryGrid.setItems(countriesService.getAllCountries(filterText.getValue()));
+        countryGrid.setItems(countriesService.getAllCountries(filterText.getValue()).stream()
+                .map(this::convertCountryDto)
+                .collect(Collectors.toList()));
+    }
+
+    private EditCountryDto convertCountryDto(CountryDto countryDto) {
+        EditCountryDto editCountryDto = new EditCountryDto();
+        editCountryDto.setId(countryDto.getId());
+        editCountryDto.setCountryName(countryDto.getCountryName());
+
+        return editCountryDto;
+    }
+
+    private CountryDto convertEditCountryDto(EditCountryDto editCountryDto) {
+        CountryDto countryDto = new CountryDto();
+        countryDto.setId(editCountryDto.getId());
+        countryDto.setCountryName(editCountryDto.getCountryName());
+
+        return countryDto;
     }
 }

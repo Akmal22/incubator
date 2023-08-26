@@ -1,4 +1,4 @@
-package com.example.incubator.back.service.dto.incubator;
+package com.example.incubator.back.service.dto.report;
 
 import lombok.Data;
 import lombok.experimental.Accessors;

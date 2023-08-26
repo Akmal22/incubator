@@ -1,6 +1,6 @@
 package com.example.incubator.ui.form;
 
-import com.example.incubator.back.service.dto.form.country.EditCountryDto;
+import com.example.incubator.ui.dto.EditCountryDto;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -60,12 +60,12 @@ public class CountryForm extends FormLayout {
     public static abstract class CountryFormEvent extends ComponentEvent<CountryForm> {
         private EditCountryDto editCountryDto;
 
-        public CountryFormEvent(CountryForm userForm, EditCountryDto editCountryDto) {
-            super(userForm, false);
+        public CountryFormEvent(CountryForm countryForm, EditCountryDto editCountryDto) {
+            super(countryForm, false);
             this.editCountryDto = editCountryDto;
         }
 
-        public EditCountryDto getUserDto() {
+        public EditCountryDto getEditCountryDto() {
             return editCountryDto;
         }
     }

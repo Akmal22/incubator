@@ -8,6 +8,7 @@ import com.example.incubator.ui.view.AboutUsView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
 import com.example.incubator.ui.view.data.CountriesView;
+import com.example.incubator.ui.view.data.IncubatorsView;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -92,14 +93,14 @@ public class MainLayout extends AppLayout {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
                     new RouterLink("Users", UsersView.class),
-                    getDataEditView(authenticationContext),
+                    getDataEditView(true),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
         if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
-                    getDataEditView(authenticationContext),
+                    getDataEditView(false),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
@@ -112,20 +113,17 @@ public class MainLayout extends AppLayout {
         }
     }
 
-    private Accordion getDataEditView(AuthenticationContext authenticationContext) {
-        UserDetails optionalUserDetails = authenticationContext.getAuthenticatedUser(UserDetails.class)
-                .orElseThrow(() -> new RuntimeException("Error"));
-
+    private Accordion getDataEditView(boolean isAdmin) {
         Accordion accordion = new Accordion();
         VerticalLayout verticalLayout = new VerticalLayout();
 
-        if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_ADMIN.name()))) {
+        if (isAdmin) {
             verticalLayout.add(new RouterLink("Countries", CountriesView.class));
+            verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
+        } else {
+            verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
         }
 
-        if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
-
-        }
         accordion.add("Data", verticalLayout);
 
         return accordion;

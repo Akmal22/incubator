@@ -73,7 +73,7 @@ create table incubator_project(
     graduated_residents_count numeric(22) not null,
     started_date timestamp not null,
     end_date timestamp not null,
-    constraint fk_incubator foreign key (incubator_id) references incubator(id)
+    constraint fk_incubator foreign key (incubator_id) references incubator(id) on delete cascade
 );
 --rollback not required
 

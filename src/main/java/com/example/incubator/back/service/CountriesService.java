@@ -2,8 +2,8 @@ package com.example.incubator.back.service;
 
 import com.example.incubator.back.entity.data.CountryEntity;
 import com.example.incubator.back.repo.CountryRepository;
-import com.example.incubator.back.service.dto.form.country.EditCountryDto;
 import com.example.incubator.back.service.dto.ServiceResult;
+import com.example.incubator.back.service.dto.country.CountryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -24,16 +24,17 @@ public class CountriesService {
                 .collect(Collectors.toList());
     }
 
-    public List<EditCountryDto> getAllCountries(String filterText) {
-        return countryRepository.findAll().stream()
-                .map(this::convertCountryEntity)
+    public List<CountryDto> getAllCountries(String filterText) {
+        return countryRepository.findAllByFilterText(filterText).stream()
+                .map(CountriesService::convertCountryEntity)
                 .collect(Collectors.toList());
     }
 
-    public ServiceResult deleteCountry(EditCountryDto editCountryDto) {
-        Optional<CountryEntity> country = countryRepository.findById(editCountryDto.getId());
+    public ServiceResult deleteCountry(CountryDto countryDto) {
+        Optional<CountryEntity> country = countryRepository.findById(countryDto.getId());
 
         if (country.isEmpty()) {
+            log.error("Country with id [{}] not found", countryDto.getId());
             return new ServiceResult(false, "Country not found");
         }
 
@@ -42,33 +43,34 @@ public class CountriesService {
         return new ServiceResult(true, null);
     }
 
-    public ServiceResult createCountry(EditCountryDto editCountryDto) {
+    public ServiceResult createCountry(CountryDto countryDto) {
         CountryEntity country = new CountryEntity();
-        country.setName(editCountryDto.getCountryName());
+        country.setName(countryDto.getCountryName());
         countryRepository.save(country);
 
         return new ServiceResult(true, null);
     }
 
-    public ServiceResult updateCountry(EditCountryDto editCountryDto) {
-        Optional<CountryEntity> country = countryRepository.findById(editCountryDto.getId());
+    public ServiceResult updateCountry(CountryDto countryDto) {
+        Optional<CountryEntity> country = countryRepository.findById(countryDto.getId());
 
         if (country.isEmpty()) {
+            log.error("Country with id [{}] not found", countryDto.getId());
             return new ServiceResult(false, "Country not found");
         }
 
         CountryEntity countryEntity = country.get();
-        countryEntity.setName(editCountryDto.getCountryName());
+        countryEntity.setName(countryDto.getCountryName());
         countryRepository.save(countryEntity);
 
         return new ServiceResult(true, null);
     }
 
-    private EditCountryDto convertCountryEntity(CountryEntity country) {
-        EditCountryDto editCountryDto = new EditCountryDto();
-        editCountryDto.setId(country.getId());
-        editCountryDto.setCountryName(country.getName());
+    public static CountryDto convertCountryEntity(CountryEntity country) {
+        CountryDto countryDto = new CountryDto();
+        countryDto.setId(country.getId());
+        countryDto.setCountryName(country.getName());
 
-        return editCountryDto;
+        return countryDto;
     }
 }
