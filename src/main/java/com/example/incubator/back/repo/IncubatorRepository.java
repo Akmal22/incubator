@@ -2,6 +2,7 @@ package com.example.incubator.back.repo;
 
 import com.example.incubator.back.entity.data.CountryEntity;
 import com.example.incubator.back.entity.data.IncubatorEntity;
+import com.example.incubator.back.entity.user.UserEntity;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -19,4 +20,6 @@ public interface IncubatorRepository extends JpaRepository<IncubatorEntity, Long
     List<IncubatorEntity> findAllByCountry(CountryEntity country);
 
     Optional<IncubatorEntity> findByName(String name);
+
+    List<IncubatorEntity> findAllByManager(UserEntity manager);
 }

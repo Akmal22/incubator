@@ -2,15 +2,16 @@ package com.example.incubator.back.service;
 
 import com.example.incubator.back.entity.data.CountryEntity;
 import com.example.incubator.back.entity.data.IncubatorEntity;
+import com.example.incubator.back.entity.user.Role;
 import com.example.incubator.back.entity.user.UserEntity;
 import com.example.incubator.back.repo.CountryRepository;
-import com.example.incubator.back.repo.IncubatorProjectRepository;
 import com.example.incubator.back.repo.IncubatorRepository;
 import com.example.incubator.back.repo.UserRepository;
 import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.back.service.dto.report.IncubatorDto;
+import com.example.incubator.back.service.dto.incubator.IncubatorDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -24,7 +25,6 @@ public class IncubatorService {
     private final UserRepository userRepository;
     private final CountryRepository countryRepository;
     private final IncubatorRepository incubatorRepository;
-    private final IncubatorProjectRepository incubatorProjectRepository;
 
     public ServiceResult createIncubator(IncubatorDto incubatorDto) {
         String incubatorName = incubatorDto.getIncubatorName();
@@ -91,7 +91,25 @@ public class IncubatorService {
 
     public List<IncubatorDto> getIncubatorsByFilterText(String filterText) {
         return incubatorRepository.findAllByFilterText(filterText).stream()
-                .map(this::convertIncubatorEntity)
+                .map(IncubatorService::convertIncubatorEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<IncubatorDto> getManagerIncubators(String managerLogin) {
+        UserEntity manager = userRepository.findByUsernameAndRole(managerLogin, Role.ROLE_BI_MANAGER)
+                .orElseThrow(() -> {
+                    log.error("Manager with login {} not found", managerLogin);
+                    throw new UsernameNotFoundException("User not found");
+                });
+
+        return incubatorRepository.findAllByManager(manager).stream()
+                .map(IncubatorService::convertIncubatorEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<IncubatorDto> getAllIncubators() {
+        return incubatorRepository.findAll().stream()
+                .map(IncubatorService::convertIncubatorEntity)
                 .collect(Collectors.toList());
     }
 
@@ -103,7 +121,7 @@ public class IncubatorService {
         });
     }
 
-    private IncubatorDto convertIncubatorEntity(IncubatorEntity incubator) {
+    public static IncubatorDto convertIncubatorEntity(IncubatorEntity incubator) {
         return new IncubatorDto()
                 .setId(incubator.getId())
                 .setIncubatorName(incubator.getName())

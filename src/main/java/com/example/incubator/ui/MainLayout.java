@@ -9,6 +9,7 @@ import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
 import com.example.incubator.ui.view.data.CountriesView;
 import com.example.incubator.ui.view.data.IncubatorsView;
+import com.example.incubator.ui.view.data.ProjectsView;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -120,8 +121,10 @@ public class MainLayout extends AppLayout {
         if (isAdmin) {
             verticalLayout.add(new RouterLink("Countries", CountriesView.class));
             verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
+            verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
         } else {
             verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
+            verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
         }
 
         accordion.add("Data", verticalLayout);

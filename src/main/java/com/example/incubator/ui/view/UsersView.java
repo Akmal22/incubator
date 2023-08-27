@@ -2,9 +2,9 @@ package com.example.incubator.ui.view;
 
 import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.ui.dto.EditUserDto;
 import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
+import com.example.incubator.ui.dto.EditUserDto;
 import com.example.incubator.ui.form.UserForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -148,6 +148,7 @@ public class UsersView extends VerticalLayout {
         EditUserDto editUserDto = new EditUserDto();
         editUserDto.setUuid(userDto.getUuid());
         editUserDto.setUsername(userDto.getUsername());
+        editUserDto.setPassword(userDto.getPassword());
         editUserDto.setEmail(userDto.getEmail());
         editUserDto.setRole(userDto.getRole());
 
@@ -158,6 +159,7 @@ public class UsersView extends VerticalLayout {
         UserDto userDto = new UserDto();
         userDto.setUuid(editUserDto.getUuid());
         userDto.setUsername(editUserDto.getUsername());
+        userDto.setPassword(editUserDto.getPassword());
         userDto.setEmail(editUserDto.getEmail());
         userDto.setRole(editUserDto.getRole());
 

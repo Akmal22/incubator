@@ -5,7 +5,7 @@ import com.example.incubator.back.service.CountriesService;
 import com.example.incubator.back.service.IncubatorService;
 import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.back.service.dto.report.IncubatorDto;
+import com.example.incubator.back.service.dto.incubator.IncubatorDto;
 import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.dto.EditIncubatorDto;

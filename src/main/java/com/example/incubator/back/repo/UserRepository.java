@@ -17,6 +17,8 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUsername(String username);
 
+    Optional<UserEntity> findByUsernameAndRole(String username, Role role);
+
     @Query("select u from UserEntity u " +
             "where u.role<>'ROLE_ADMIN' " +
             "and (lower(u.username) like lower(concat('%', :filterText, '%')) " +

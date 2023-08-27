@@ -71,11 +71,11 @@ public class UserService implements UserDetailsService {
     }
 
     public UserDto getManager(String name) {
-        return userRepository.findByUsername(name)
+        return userRepository.findByUsernameAndRole(name, Role.ROLE_BI_MANAGER)
                 .map(UserService::convertUserEntity)
                 .orElseThrow(() -> {
-                    log.error("User with username {} not found", name);
-                    throw new UsernameNotFoundException("Username or password is invalid");
+                    log.error("Manager with login {} not found", name);
+                    throw new IllegalArgumentException("User not found");
                 });
     }
 

@@ -1,4 +1,4 @@
-package com.example.incubator.back.service.dto.report;
+package com.example.incubator.back.service.dto.incubator;
 
 import com.example.incubator.back.service.dto.country.CountryDto;
 import com.example.incubator.back.service.dto.user.UserDto;
