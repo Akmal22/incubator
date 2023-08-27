@@ -17,13 +17,15 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
 
     Optional<UserEntity> findByUsername(String username);
 
-    Optional<UserEntity> findByEmail(String email);
+    Optional<UserEntity> findByUsernameAndRole(String username, Role role);
 
     @Query("select u from UserEntity u " +
             "where u.role<>'ROLE_ADMIN' " +
             "and (lower(u.username) like lower(concat('%', :filterText, '%')) " +
-            "or lower(u.email) like lower(concat('%', :filterText, '%')))   ")
+            "or lower(u.email) like lower(concat('%', :filterText, '%')))")
     List<UserEntity> findAllByFilterText(String filterText);
+
+    List<UserEntity> findAllByRole(Role role);
 
     @Transactional
     @Modifying

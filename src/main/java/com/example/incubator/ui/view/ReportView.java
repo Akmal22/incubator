@@ -1,8 +1,9 @@
 package com.example.incubator.ui.view;
 
-import com.example.incubator.back.service.IncubatorService;
-import com.example.incubator.back.service.dto.IncubatorDto;
-import com.example.incubator.back.service.dto.IncubatorProjectDto;
+import com.example.incubator.back.service.CountriesService;
+import com.example.incubator.back.service.ReportService;
+import com.example.incubator.back.service.dto.incubator.IncubatorDto;
+import com.example.incubator.back.service.dto.incubator.IncubatorProjectDto;
 import com.example.incubator.ui.MainLayout;
 import com.vaadin.flow.component.ClickEvent;
 import com.vaadin.flow.component.button.Button;
@@ -31,15 +32,17 @@ import static org.apache.commons.lang3.StringUtils.isNotBlank;
 @Route(value = "", layout = MainLayout.class)
 @PageTitle("Report")
 public class ReportView extends VerticalLayout {
-    private final IncubatorService incubatorService;
+    private final ReportService reportService;
+    private final CountriesService countriesService;
 
     private final ComboBox<String> country = new ComboBox<>("Country");
     private final ComboBox<String> incubator = new ComboBox<>("Incubator");
     private final ComboBox<String> incubatorProject = new ComboBox<>("Incubator project");
     private final VerticalLayout reportLayout = new VerticalLayout();
 
-    public ReportView(IncubatorService incubatorService) {
-        this.incubatorService = incubatorService;
+    public ReportView(ReportService reportService, CountriesService countriesService) {
+        this.reportService = reportService;
+        this.countriesService = countriesService;
         add(getSearchToolBar());
     }
 
@@ -47,9 +50,9 @@ public class ReportView extends VerticalLayout {
         HorizontalLayout searchBar = new HorizontalLayout();
         searchBar.setDefaultVerticalComponentAlignment(Alignment.END);
 
-        country.setItems(incubatorService.getCountryNames());
-        country.addValueChangeListener(v -> incubator.setItems(incubatorService.getIncubatorNamesByCountry(v.getValue())));
-        incubator.addValueChangeListener(v -> incubatorProject.setItems(incubatorService.getIncubatorProjectsByIncubator(v.getValue())));
+        country.setItems(countriesService.getCountryNames());
+        country.addValueChangeListener(v -> incubator.setItems(reportService.getIncubatorNamesByCountry(v.getValue())));
+        incubator.addValueChangeListener(v -> incubatorProject.setItems(reportService.getIncubatorProjectsByIncubator(v.getValue())));
 
         var searchButton = new Button("Report");
         searchButton.addClickListener(this::report);
@@ -62,7 +65,7 @@ public class ReportView extends VerticalLayout {
         reportLayout.removeAll();
         String incubatorName = incubator.getValue();
         String incubatorProjectName = incubatorProject.getValue();
-        IncubatorDto incubatorDto = incubatorService.getIncubator(incubatorName);
+        IncubatorDto incubatorDto = reportService.getIncubator(incubatorName);
 
         VerticalLayout basicInfoLayout = new VerticalLayout();
         Span founded = new Span("Founded: " + incubatorDto.getFounded());
@@ -76,7 +79,7 @@ public class ReportView extends VerticalLayout {
         long graduated;
 
         if (isNotBlank(incubatorProjectName)) {
-            IncubatorProjectDto incubatorProjectDto = incubatorService.getIncubatorProject(incubatorProjectName);
+            IncubatorProjectDto incubatorProjectDto = reportService.getIncubatorProject(incubatorProjectName);
             basicInfoLayout.add(new Span("Project name: " + incubatorProjectDto.getName()));
             incomeAmount = incubatorProjectDto.getIncome();
             expenseAmount = incubatorProjectDto.getExpenses();

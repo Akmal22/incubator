@@ -5,9 +5,11 @@ import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.security.SecurityService;
 import com.example.incubator.ui.security.ChangePasswordDialog;
 import com.example.incubator.ui.view.AboutUsView;
-import com.example.incubator.ui.view.data.CountriesView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
+import com.example.incubator.ui.view.data.CountriesView;
+import com.example.incubator.ui.view.data.IncubatorsView;
+import com.example.incubator.ui.view.data.ProjectsView;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -92,14 +94,14 @@ public class MainLayout extends AppLayout {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
                     new RouterLink("Users", UsersView.class),
-                    getDataEditView(authenticationContext),
+                    getDataEditView(true),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
         if (optionalUserDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
             addToDrawer(new VerticalLayout(
                     new RouterLink("Report", ReportView.class),
-                    getDataEditView(authenticationContext),
+                    getDataEditView(false),
                     new RouterLink("About", AboutUsView.class)
             ));
         }
@@ -112,10 +114,19 @@ public class MainLayout extends AppLayout {
         }
     }
 
-    private Accordion getDataEditView(AuthenticationContext authenticationContext) {
+    private Accordion getDataEditView(boolean isAdmin) {
         Accordion accordion = new Accordion();
         VerticalLayout verticalLayout = new VerticalLayout();
-        verticalLayout.add(new RouterLink("Data", CountriesView.class));
+
+        if (isAdmin) {
+            verticalLayout.add(new RouterLink("Countries", CountriesView.class));
+            verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
+            verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
+        } else {
+            verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
+            verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
+        }
+
         accordion.add("Data", verticalLayout);
 
         return accordion;

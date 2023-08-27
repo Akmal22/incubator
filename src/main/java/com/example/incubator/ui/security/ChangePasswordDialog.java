@@ -2,7 +2,7 @@ package com.example.incubator.ui.security;
 
 
 import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.ChangePasswordDto;
+import com.example.incubator.back.service.dto.user.ChangePasswordDto;
 import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.ui.form.ChangePasswordForm;
 import com.vaadin.flow.component.Key;

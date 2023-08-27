@@ -1,4 +1,4 @@
-package com.example.incubator.back.service.dto;
+package com.example.incubator.ui.dto;
 
 import com.example.incubator.back.entity.user.Role;
 import jakarta.validation.constraints.NotBlank;

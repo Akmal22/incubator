@@ -12,6 +12,7 @@ import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 
+import java.time.LocalDate;
 import java.util.Date;
 
 @Data
@@ -32,13 +33,13 @@ public class IncubatorProjectEntity {
     @Column(name = "expenses", nullable = false)
     private Double expenses;
     @Column(name = "applications_count", nullable = false)
-    private long residentApplications;
+    private int residentApplications;
     @Column(name = "accepted_applications", nullable = false)
-    private long acceptedResidentApplications;
+    private int acceptedResidentApplications;
     @Column(name = "graduated_residents_count", nullable = false)
-    private long graduatedResidentsCount;
+    private int graduatedResidentsCount;
     @Column(name = "started_date", nullable = false)
-    private Date startedDate;
-    @Column(name = "end_date", nullable = false)
-    private Date endDate;
+    private LocalDate startedDate;
+    @Column(name = "end_date")
+    private LocalDate endDate;
 }

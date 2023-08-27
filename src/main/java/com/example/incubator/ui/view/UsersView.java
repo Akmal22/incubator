@@ -1,9 +1,10 @@
 package com.example.incubator.ui.view;
 
 import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.EditUserDto;
 import com.example.incubator.back.service.dto.ServiceResult;
+import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
+import com.example.incubator.ui.dto.EditUserDto;
 import com.example.incubator.ui.form.UserForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
@@ -15,6 +16,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import jakarta.annotation.security.RolesAllowed;
 
+import java.util.stream.Collectors;
+
 import static org.apache.commons.lang3.StringUtils.isBlank;
 
 
@@ -25,8 +28,8 @@ public class UsersView extends VerticalLayout {
     private final UserService userService;
 
     private UserForm userForm;
-    Grid<EditUserDto> usersGrid = new Grid<>(EditUserDto.class);
-    TextField filterText = new TextField();
+    private Grid<EditUserDto> usersGrid;
+    private TextField filterText;
 
     public UsersView(UserService userService) {
         this.userService = userService;
@@ -34,7 +37,7 @@ public class UsersView extends VerticalLayout {
         addClassName("list-view");
         setSizeFull();
         configureGrid();
-        configureUsersGrid();
+        configureUserForm();
 
         add(getToolBar(), getContent());
 
@@ -43,7 +46,7 @@ public class UsersView extends VerticalLayout {
     }
 
     private HorizontalLayout getToolBar() {
-
+        filterText = new TextField();
         filterText.setPlaceholder("Filter user by name or email ...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
@@ -68,34 +71,33 @@ public class UsersView extends VerticalLayout {
     }
 
     private void configureGrid() {
+        usersGrid = new Grid<>(EditUserDto.class);
         usersGrid.addClassName("contact-grid");
         usersGrid.setSizeFull();
         usersGrid.setColumns("username");
         usersGrid.addColumn(editUserDto -> editUserDto.getRole().getName()).setHeader("Role");
 
         usersGrid.getColumns().forEach(col -> col.setAutoWidth(true));
-
         usersGrid.asSingleSelect().addValueChangeListener(event -> editUser(event.getValue(), true));
     }
 
-    private void configureUsersGrid() {
+    private void configureUserForm() {
         userForm = new UserForm();
 
         userForm.setWidth("25em");
         userForm.addSaveListener(this::saveUser);
         userForm.addDeleteListener(this::deleteUser);
-        userForm.addCloseEditor(e -> closeEditor());
+        userForm.addCloseEditorListener(e -> closeEditor());
     }
 
     private void saveUser(UserForm.SaveEvent event) {
         EditUserDto editUserDto = event.getUserDto();
         ServiceResult serviceResult;
         if (isBlank(editUserDto.getUuid())) {
-            serviceResult = userService.createUser(editUserDto);
+            serviceResult = userService.createUser(convertEditUserDto(editUserDto));
         } else {
-            serviceResult = userService.updateUser(editUserDto);
+            serviceResult = userService.updateUser(convertEditUserDto(editUserDto));
         }
-
 
         if (!serviceResult.isSuccess()) {
             userForm.getErrorMessageLabel().setEnabled(!serviceResult.isSuccess());
@@ -107,7 +109,7 @@ public class UsersView extends VerticalLayout {
     }
 
     private void deleteUser(UserForm.DeleteEvent event) {
-        userService.deleteUser(event.getUserDto());
+        userService.deleteUser(convertEditUserDto(event.getUserDto()));
         updateUserList();
         closeEditor();
     }
@@ -137,6 +139,30 @@ public class UsersView extends VerticalLayout {
     }
 
     private void updateUserList() {
-        usersGrid.setItems(userService.getAllUsers(filterText.getValue()));
+        usersGrid.setItems(userService.getAllUsers(filterText.getValue()).stream()
+                .map(this::convertUserDto)
+                .collect(Collectors.toList()));
+    }
+
+    private EditUserDto convertUserDto(UserDto userDto) {
+        EditUserDto editUserDto = new EditUserDto();
+        editUserDto.setUuid(userDto.getUuid());
+        editUserDto.setUsername(userDto.getUsername());
+        editUserDto.setPassword(userDto.getPassword());
+        editUserDto.setEmail(userDto.getEmail());
+        editUserDto.setRole(userDto.getRole());
+
+        return editUserDto;
+    }
+
+    private UserDto convertEditUserDto(EditUserDto editUserDto) {
+        UserDto userDto = new UserDto();
+        userDto.setUuid(editUserDto.getUuid());
+        userDto.setUsername(editUserDto.getUsername());
+        userDto.setPassword(editUserDto.getPassword());
+        userDto.setEmail(editUserDto.getEmail());
+        userDto.setRole(editUserDto.getRole());
+
+        return userDto;
     }
 }
