@@ -36,3 +36,9 @@ build/
 
 #Vaadin
 frontend/generated
+
+tsconfig.json
+types.d.ts
+vite.config.ts
+vite.generated.ts
+src/main/dev-bundle

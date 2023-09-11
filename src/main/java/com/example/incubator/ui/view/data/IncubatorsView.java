@@ -8,7 +8,7 @@ import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.back.service.dto.incubator.IncubatorDto;
 import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
-import com.example.incubator.ui.dto.EditIncubatorDto;
+import com.example.incubator.ui.form.dto.EditIncubatorDto;
 import com.example.incubator.ui.form.IncubatorForm;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;

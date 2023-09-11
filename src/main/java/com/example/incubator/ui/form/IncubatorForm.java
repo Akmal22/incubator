@@ -2,7 +2,7 @@ package com.example.incubator.ui.form;
 
 import com.example.incubator.back.service.dto.country.CountryDto;
 import com.example.incubator.back.service.dto.user.UserDto;
-import com.example.incubator.ui.dto.EditIncubatorDto;
+import com.example.incubator.ui.form.dto.EditIncubatorDto;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
