@@ -1,4 +1,4 @@
-package com.example.incubator.ui.dto;
+package com.example.incubator.ui.form.dto;
 
 import com.example.incubator.back.service.dto.incubator.IncubatorDto;
 import jakarta.validation.constraints.NotBlank;
