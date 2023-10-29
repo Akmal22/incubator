@@ -51,6 +51,13 @@ public class ReportService {
                         .collect(Collectors.toList()));
     }
 
+    public List<IncubatorDto> getIncubatorsByCountry(String countryName) {
+        CountryEntity country = countryRepository.findByName(countryName).orElseThrow(() -> new IllegalArgumentException("Country not found"));
+        return incubatorRepository.findAllByCountryFetchIncubators(country).stream()
+                .map(this::convertIncubatorEntity)
+                .collect(Collectors.toList());
+    }
+
     public IncubatorProjectDto getIncubatorProject(String incubatorProjectName) {
         IncubatorProjectEntity incubatorProjectEntity = incubatorProjectRepository.findByName(incubatorProjectName).orElseThrow(() -> new IllegalArgumentException("Incubator project not found"));
 
@@ -65,5 +72,15 @@ public class ReportService {
                 .setResidentApplications(incubatorProjectEntity.getResidentApplications())
                 .setAcceptedResidents(incubatorProjectEntity.getAcceptedResidentApplications())
                 .setGraduatedResidents(incubatorProjectEntity.getGraduatedResidentsCount());
+    }
+
+    private IncubatorDto convertIncubatorEntity(IncubatorEntity incubator) {
+        return new IncubatorDto()
+                .setIncubatorName(incubator.getName())
+                .setFounder(incubator.getFounder())
+                .setFounded(incubator.getFounded())
+                .setIncubatorProjects(incubator.getIncubatorProjects().stream()
+                        .map(this::convertIncubatorProjectEntity)
+                        .collect(Collectors.toList()));
     }
 }

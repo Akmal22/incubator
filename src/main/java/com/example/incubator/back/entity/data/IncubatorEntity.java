@@ -9,11 +9,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.util.List;
 
 @Data
 @Entity
@@ -35,4 +37,6 @@ public class IncubatorEntity {
     private LocalDate founded;
     @Column(name = "FOUNDER", nullable = false)
     private String founder;
+    @OneToMany(mappedBy = "incubator", fetch = FetchType.LAZY)
+    private List<IncubatorProjectEntity> incubatorProjects;
 }
