@@ -1,5 +1,8 @@
 package com.example.incubator.ui.form;
 
+import com.example.incubator.back.entity.user.Role;
+import com.example.incubator.back.service.CountriesService;
+import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.dto.country.CountryDto;
 import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.form.dto.EditIncubatorDto;
@@ -16,6 +19,9 @@ import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import java.util.List;
 
@@ -35,14 +41,21 @@ public class IncubatorForm extends FormLayout {
     Binder<EditIncubatorDto> binder = new BeanValidationBinder<>(EditIncubatorDto.class);
     Label errorMessageLabel = new Label();
 
-    public IncubatorForm(List<CountryDto> countries, List<UserDto> managers) {
+    public IncubatorForm(CountriesService countriesService, UserService userService, UserDetails userDetails) {
         addClassName("contact-form");
         binder.bindInstanceFields(this);
 
-        country.setItems(countries);
+        country.setItemsWithFilterConverter(query -> countriesService.pageSearch(
+                query.getFilter().orElse(""), PageRequest.of(query.getPage(), query.getLimit())).stream(), country -> country);
         country.setItemLabelGenerator(CountryDto::getCountryName);
 
-        manager.setItems(managers);
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
+            manager.setItems(List.of(userService.getManager(userDetails.getUsername())));
+        } else {
+            manager.setItemsWithFilterConverter(
+                    query -> userService.getAllManagersPageable(PageRequest.of(query.getPage(), query.getLimit())).stream(),
+                    manager -> manager);
+        }
         manager.setItemLabelGenerator(UserDto::getUsername);
 
         errorMessageLabel.getStyle().set("color", "Red");

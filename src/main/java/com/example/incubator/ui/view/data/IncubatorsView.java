@@ -1,15 +1,13 @@
 package com.example.incubator.ui.view.data;
 
-import com.example.incubator.back.entity.user.Role;
 import com.example.incubator.back.service.CountriesService;
 import com.example.incubator.back.service.IncubatorService;
 import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.back.service.dto.incubator.IncubatorDto;
-import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
-import com.example.incubator.ui.form.dto.EditIncubatorDto;
 import com.example.incubator.ui.form.IncubatorForm;
+import com.example.incubator.ui.form.dto.EditIncubatorDto;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -20,10 +18,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.RolesAllowed;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RolesAllowed({"ADMIN", "BI_MANAGER"})
@@ -73,13 +69,7 @@ public class IncubatorsView extends VerticalLayout {
     }
 
     private void configureIncubatorForm(UserDetails userDetails) {
-        List<UserDto> managers;
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
-            managers = List.of(userService.getManager(userDetails.getUsername()));
-        } else {
-            managers = userService.getAllManagers();
-        }
-        incubatorForm = new IncubatorForm(countriesService.getAllCountries(""), managers);
+        incubatorForm = new IncubatorForm(countriesService, userService, userDetails);
 
         incubatorForm.setWidth("25em");
         incubatorForm.addSaveListener(this::saveIncubator);

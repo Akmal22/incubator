@@ -6,6 +6,7 @@ import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.back.service.dto.country.CountryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
@@ -26,6 +27,12 @@ public class CountriesService {
 
     public List<CountryDto> getAllCountries(String filterText) {
         return countryRepository.findAllByFilterText(filterText).stream()
+                .map(CountriesService::convertCountryEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<CountryDto> pageSearch(String filterText, Pageable pageable) {
+        return countryRepository.findAllByFilterTextPageable(filterText, pageable).stream()
                 .map(CountriesService::convertCountryEntity)
                 .collect(Collectors.toList());
     }
