@@ -44,6 +44,13 @@ public class CountriesService {
     }
 
     public ServiceResult createCountry(CountryDto countryDto) {
+        Optional<CountryEntity> optionalCountryEntity = countryRepository.findByName(countryDto.getCountryName());
+
+        if (optionalCountryEntity.isPresent()) {
+            log.error("Country with name [{}] already exists ", countryDto.getId());
+            return new ServiceResult(false, "Country already exists");
+        }
+
         CountryEntity country = new CountryEntity();
         country.setName(countryDto.getCountryName());
         countryRepository.save(country);

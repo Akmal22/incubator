@@ -3,9 +3,9 @@ package com.example.incubator.ui.view.data;
 import com.example.incubator.back.service.CountriesService;
 import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.back.service.dto.country.CountryDto;
-import com.example.incubator.ui.form.dto.EditCountryDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.CountryForm;
+import com.example.incubator.ui.form.dto.EditCountryDto;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -107,9 +107,14 @@ public class CountriesView extends VerticalLayout {
     }
 
     private void deleteCountry(CountryForm.DeleteEvent event) {
-        countriesService.deleteCountry(convertEditCountryDto(event.getEditCountryDto()));
-        updateCountriesList();
-        closeEditor();
+        ServiceResult serviceResult = countriesService.deleteCountry(convertEditCountryDto(event.getEditCountryDto()));
+        if (!serviceResult.isSuccess()) {
+            countryForm.getErrorMessageLabel().setEnabled(!serviceResult.isSuccess());
+            countryForm.getErrorMessageLabel().setText(serviceResult.getErrorMessage());
+        } else {
+            updateCountriesList();
+            closeEditor();
+        }
     }
 
     private void addCountry() {
