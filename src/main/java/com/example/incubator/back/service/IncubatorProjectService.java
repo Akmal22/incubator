@@ -11,6 +11,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -29,6 +30,11 @@ public class IncubatorProjectService {
     public ServiceResult createIncubatorProject(IncubatorProjectDto incubatorProjectDto) {
         IncubatorEntity incubator = getIncubator(incubatorProjectDto.getIncubatorDto().getId());
 
+        Optional<IncubatorProjectEntity> optionalIncubatorProjectEntity = incubatorProjectRepository.findByName(incubatorProjectDto.getName());
+        if (optionalIncubatorProjectEntity.isPresent()) {
+            log.error("Incubator project with name [{}] already exists", incubatorProjectDto.getName());
+            return new ServiceResult(false, "Incubator with given name already exists");
+        }
         IncubatorProjectEntity incubatorProjectEntity = new IncubatorProjectEntity();
         incubatorProjectEntity.setName(incubatorProjectDto.getName());
         incubatorProjectEntity.setIncubator(incubator);

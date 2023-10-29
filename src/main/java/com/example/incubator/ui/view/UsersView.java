@@ -4,8 +4,8 @@ import com.example.incubator.back.service.UserService;
 import com.example.incubator.back.service.dto.ServiceResult;
 import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
-import com.example.incubator.ui.form.dto.EditUserDto;
 import com.example.incubator.ui.form.UserForm;
+import com.example.incubator.ui.form.dto.EditUserDto;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -109,9 +109,14 @@ public class UsersView extends VerticalLayout {
     }
 
     private void deleteUser(UserForm.DeleteEvent event) {
-        userService.deleteUser(convertEditUserDto(event.getUserDto()));
-        updateUserList();
-        closeEditor();
+        ServiceResult serviceResult = userService.deleteUser(convertEditUserDto(event.getUserDto()));
+        if (!serviceResult.isSuccess()) {
+            userForm.getErrorMessageLabel().setEnabled(!serviceResult.isSuccess());
+            userForm.getErrorMessageLabel().setText(serviceResult.getErrorMessage());
+        } else {
+            updateUserList();
+            closeEditor();
+        }
     }
 
     private void addUser() {
