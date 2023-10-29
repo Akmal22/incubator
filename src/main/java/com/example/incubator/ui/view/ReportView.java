@@ -21,6 +21,7 @@ import org.vaadin.olli.FileDownloadWrapper;
 
 import java.io.FileInputStream;
 import java.io.FileNotFoundException;
+import java.util.List;
 
 import static com.example.incubator.ui.view.util.ReportUtil.getIncomeChart;
 import static com.example.incubator.ui.view.util.ReportUtil.getResidentsChart;
@@ -69,9 +70,12 @@ public class ReportView extends VerticalLayout {
         prepareShortReportData();
 
         VerticalLayout basicInfoLayout = new VerticalLayout();
-        Span founded = new Span("Founded: " + shortReport.getFounded());
-        Span founder = new Span("Founder: " + shortReport.getFounder());
-        basicInfoLayout.add(founded, founder);
+        if (isNotBlank(shortReport.getFounded())) {
+            basicInfoLayout.add(new Span("Founded: " + shortReport.getFounded()));
+        }
+        if (isNotBlank(shortReport.getFounder())) {
+            basicInfoLayout.add(new Span("Founder: " + shortReport.getFounder()));
+        }
 
         if (isNotBlank(shortReport.getProjectName())) {
             basicInfoLayout.add(new Span("Project name: " + shortReport.getProjectName()));
@@ -101,34 +105,53 @@ public class ReportView extends VerticalLayout {
     }
 
     private void prepareShortReportData() {
+        String countryName = country.getValue();
         String incubatorName = incubator.getValue();
         String incubatorProjectName = incubatorProject.getValue();
-        IncubatorDto incubatorDto = reportService.getIncubator(incubatorName);
 
-        String projectName = null;
+
         Double incomeAmount;
         Double expenseAmount;
         long applications;
         long accepted;
         long graduated;
+        String founded = null;
+        String founder = null;
+        String projectName = null;
 
         if (isNotBlank(incubatorProjectName)) {
             IncubatorProjectDto incubatorProjectDto = reportService.getIncubatorProject(incubatorProjectName);
-            projectName = incubatorProjectDto.getName();
+            IncubatorDto incubatorDto = incubatorProjectDto.getIncubatorDto();
+            founded = incubatorDto.getFounded().toString();
+            founder = incubatorDto.getFounder();
+            projectName = incubatorDto.getIncubatorName();
             incomeAmount = incubatorProjectDto.getIncome();
             expenseAmount = incubatorProjectDto.getExpenses();
             applications = incubatorProjectDto.getResidentApplications();
             accepted = incubatorProjectDto.getAcceptedResidents();
             graduated = incubatorProjectDto.getGraduatedResidents();
-        } else {
+        } else if (isNotBlank(incubatorName)) {
+            IncubatorDto incubatorDto = reportService.getIncubator(incubatorName);
+            founded = incubatorDto.getFounded().toString();
+            founder = incubatorDto.getFounder();
             incomeAmount = incubatorDto.getIncubatorProjects().stream().mapToDouble(IncubatorProjectDto::getIncome).sum();
             expenseAmount = incubatorDto.getIncubatorProjects().stream().mapToDouble(IncubatorProjectDto::getExpenses).sum();
             applications = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getResidentApplications).sum();
             accepted = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getAcceptedResidents).sum();
             graduated = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getGraduatedResidents).sum();
+        } else {
+            List<IncubatorDto> incubators = reportService.getIncubatorsByCountry(countryName);
+            List<IncubatorProjectDto> projects = incubators.stream()
+                    .flatMap(i -> i.getIncubatorProjects().stream()).toList();
+
+            incomeAmount = projects.stream().mapToDouble(IncubatorProjectDto::getIncome).sum();
+            expenseAmount = projects.stream().mapToDouble(IncubatorProjectDto::getExpenses).sum();
+            applications = projects.stream().mapToLong(IncubatorProjectDto::getResidentApplications).sum();
+            accepted = projects.stream().mapToLong(IncubatorProjectDto::getAcceptedResidents).sum();
+            graduated = projects.stream().mapToLong(IncubatorProjectDto::getGraduatedResidents).sum();
         }
 
         shortReport = new ShortReport(getIncomeChart(incomeAmount, expenseAmount), getResidentsChart(applications, accepted, graduated),
-                incubatorDto.getFounded().toString(), incubatorDto.getFounder(), projectName);
+                founded, founder, projectName);
     }
 }

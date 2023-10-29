@@ -19,6 +19,9 @@ public interface IncubatorRepository extends JpaRepository<IncubatorEntity, Long
 
     List<IncubatorEntity> findAllByCountry(CountryEntity country);
 
+    @Query("SELECT i from IncubatorEntity i join fetch i.incubatorProjects where i.country = :country")
+    List<IncubatorEntity> findAllByCountryFetchIncubators(CountryEntity country);
+
     Optional<IncubatorEntity> findByName(String name);
 
     List<IncubatorEntity> findAllByManager(UserEntity manager);
