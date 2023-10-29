@@ -109,7 +109,6 @@ public class ReportView extends VerticalLayout {
         String incubatorName = incubator.getValue();
         String incubatorProjectName = incubatorProject.getValue();
 
-
         Double incomeAmount;
         Double expenseAmount;
         long applications;

@@ -2,6 +2,7 @@ package com.example.incubator.back.repo;
 
 import com.example.incubator.back.entity.user.Role;
 import com.example.incubator.back.entity.user.UserEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -25,7 +26,7 @@ public interface UserRepository extends JpaRepository<UserEntity, Long> {
             "or lower(u.email) like lower(concat('%', :filterText, '%')))")
     List<UserEntity> findAllByFilterText(String filterText);
 
-    List<UserEntity> findAllByRole(Role role);
+    List<UserEntity> findAllByRole(Role role, Pageable pageable);
 
     @Transactional
     @Modifying

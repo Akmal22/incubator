@@ -10,6 +10,7 @@ import com.example.incubator.back.service.dto.user.UserDto;
 import com.example.incubator.back.service.security.SecurityService;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -64,8 +65,8 @@ public class UserService implements UserDetailsService {
                 .collect(Collectors.toList());
     }
 
-    public List<UserDto> getAllManagers() {
-        return userRepository.findAllByRole(Role.ROLE_BI_MANAGER).stream()
+    public List<UserDto> getAllManagersPageable(Pageable pageable) {
+        return userRepository.findAllByRole(Role.ROLE_BI_MANAGER, pageable).stream()
                 .map(UserService::convertUserEntity)
                 .collect(Collectors.toList());
     }

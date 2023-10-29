@@ -59,7 +59,7 @@ public class ReportService {
     }
 
     public IncubatorProjectDto getIncubatorProject(String incubatorProjectName) {
-        IncubatorProjectEntity incubatorProjectEntity = incubatorProjectRepository.findByName(incubatorProjectName).orElseThrow(() -> new IllegalArgumentException("Incubator project not found"));
+        IncubatorProjectEntity incubatorProjectEntity = incubatorProjectRepository.findByNameFetchIncubator(incubatorProjectName).orElseThrow(() -> new IllegalArgumentException("Incubator project not found"));
 
         return convertIncubatorProjectEntity(incubatorProjectEntity);
     }
@@ -71,7 +71,13 @@ public class ReportService {
                 .setExpenses(incubatorProjectEntity.getExpenses())
                 .setResidentApplications(incubatorProjectEntity.getResidentApplications())
                 .setAcceptedResidents(incubatorProjectEntity.getAcceptedResidentApplications())
-                .setGraduatedResidents(incubatorProjectEntity.getGraduatedResidentsCount());
+                .setGraduatedResidents(incubatorProjectEntity.getGraduatedResidentsCount())
+                .setStartDate(incubatorProjectEntity.getStartedDate())
+                .setEndDate(incubatorProjectEntity.getEndDate())
+                .setIncubatorDto(new IncubatorDto()
+                        .setIncubatorName(incubatorProjectEntity.getIncubator().getName())
+                        .setFounded(incubatorProjectEntity.getIncubator().getFounded())
+                        .setFounder(incubatorProjectEntity.getIncubator().getFounder()));
     }
 
     private IncubatorDto convertIncubatorEntity(IncubatorEntity incubator) {

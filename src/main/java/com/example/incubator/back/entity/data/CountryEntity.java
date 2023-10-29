@@ -10,6 +10,7 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import lombok.Data;
+import lombok.ToString;
 
 import java.util.List;
 
@@ -24,5 +25,6 @@ public class CountryEntity {
     @Column(name = "name", nullable = false, unique = true)
     private String name;
     @OneToMany(mappedBy = "country", fetch = FetchType.LAZY)
+    @ToString.Exclude
     private List<IncubatorEntity> incubators;
 }

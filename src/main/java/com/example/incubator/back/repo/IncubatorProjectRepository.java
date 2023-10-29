@@ -15,6 +15,9 @@ public interface IncubatorProjectRepository extends JpaRepository<IncubatorProje
 
     Optional<IncubatorProjectEntity> findByName(String name);
 
+    @Query("select i from IncubatorProjectEntity i join fetch i.incubator where i.name = :name")
+    Optional<IncubatorProjectEntity> findByNameFetchIncubator(String name);
+
     @Query("select i from IncubatorProjectEntity i " +
             "where lower(i.name) like lower(concat('%', :filterText, '%'))")
     List<IncubatorProjectEntity> findAllByFilterText(String filterText);
