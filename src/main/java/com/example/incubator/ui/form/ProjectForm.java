@@ -1,6 +1,6 @@
 package com.example.incubator.ui.form;
 
-import com.example.incubator.back.service.dto.incubator.IncubatorDto;
+import com.example.incubator.backend.service.dto.incubator.IncubatorDto;
 import com.example.incubator.ui.form.dto.EditProjectDto;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;

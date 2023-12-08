@@ -1,9 +1,9 @@
 package com.example.incubator.ui.view;
 
-import com.example.incubator.back.service.CountriesService;
-import com.example.incubator.back.service.ReportService;
-import com.example.incubator.back.service.dto.incubator.IncubatorDto;
-import com.example.incubator.back.service.dto.incubator.IncubatorProjectDto;
+import com.example.incubator.backend.service.CountriesService;
+import com.example.incubator.backend.service.ReportService;
+import com.example.incubator.backend.service.dto.incubator.IncubatorDto;
+import com.example.incubator.backend.service.dto.incubator.IncubatorProjectDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.view.dto.ShortReport;
 import com.example.incubator.ui.view.util.ReportPdfWriter;

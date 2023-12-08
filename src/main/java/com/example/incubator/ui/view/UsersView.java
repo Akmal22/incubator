@@ -1,8 +1,8 @@
 package com.example.incubator.ui.view;
 
-import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.back.service.dto.user.UserDto;
+import com.example.incubator.backend.service.UserService;
+import com.example.incubator.backend.service.dto.ServiceResult;
+import com.example.incubator.backend.service.dto.user.UserDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.UserForm;
 import com.example.incubator.ui.form.dto.EditUserDto;

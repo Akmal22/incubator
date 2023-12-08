@@ -1,8 +1,8 @@
 package com.example.incubator.ui;
 
-import com.example.incubator.back.entity.user.Role;
-import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.security.SecurityService;
+import com.example.incubator.backend.entity.user.Role;
+import com.example.incubator.backend.service.UserService;
+import com.example.incubator.backend.service.security.SecurityService;
 import com.example.incubator.ui.security.ChangePasswordDialog;
 import com.example.incubator.ui.view.AboutUsView;
 import com.example.incubator.ui.view.ReportView;
