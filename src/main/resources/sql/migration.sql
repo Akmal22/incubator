@@ -82,3 +82,79 @@ create table incubator_project(
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.sequences where sequence_name = 'seq_inc_project';
 create sequence seq_inc_project start with 1;
 --rollback not required
+
+--changeset rakhimbaev:changeset-8
+--preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
+--precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'CLIENT';
+create table CLIENT(
+                        id numeric(22,0) primary key,
+                        project_id numeric(22,0) not null,
+                        applications numeric(22,0) not null,
+                        accepted numeric(22,0) not null,
+                        graduated numeric(22,0) not null,
+                        failed numeric(22,0) not null,
+                        constraint fk_client_project foreign key (project_id) references incubator_project(id) on delete cascade
+);
+create sequence seq_client start with 1;
+--rollback not required
+
+--changeset rakhimbaev:changeset-9
+--preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
+--precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'REVENUE';
+create table REVENUE(
+                       id numeric(22,0) primary key,
+                       project_id numeric(22,0) not null,
+                       lease_revenue numeric(22,0) not null,
+                       services_revenue numeric(22,0) not null,
+                       sponsorship_revenue numeric(22,0) not null,
+                       grant_revenue numeric(22,0) not null,
+                       constraint fk_revenue_project foreign key (project_id) references incubator_project(id) on delete cascade
+);
+create sequence seq_revenue start with 1;
+--rollback not required
+
+--changeset rakhimbaev:changeset-10
+--preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
+--precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'CONSUMED_RESOURCES';
+create table CONSUMED_RESOURCES(
+                        id numeric(22,0) primary key,
+                        project_id numeric(22,0) not null,
+                        involved_managers numeric(22,0) not null,
+                        involved_coaches numeric(22,0) not null,
+                        involved_mentors numeric(22,0) not null,
+                        used_services numeric(22,0) not null,
+                        rent_space numeric(22,0) not null,
+                        constraint fk_resources_project foreign key (project_id) references incubator_project(id) on delete cascade
+);
+create sequence seq_resources_project start with 1;
+--rollback not required
+
+--changeset rakhimbaev:changeset-11
+--preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
+--precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'INVESTMENT';
+create table INVESTMENT(
+                                   id numeric(22,0) primary key,
+                                   project_id numeric(22,0) not null,
+                                   investors_count numeric(22,0) not null,
+                                   percentage_of_invested_clients numeric(22,0) not null,
+                                   constraint fk_investment_project foreign key (project_id) references incubator_project(id) on delete cascade
+);
+create sequence seq_investment start with 1;
+--rollback not required
+
+--changeset rakhimbaev:changeset-12
+--preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
+--precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'EXPENSE';
+create table EXPENSE(
+                           id numeric(22,0) primary key,
+                           project_id numeric(22,0) not null,
+                           marketing numeric(22,0) not null,
+                           payroll numeric(22,0) not null,
+                           equipment numeric(22,0) not null,
+                           utilities numeric(22,0) not null,
+                           material numeric(22,0) not null,
+                           insurance numeric(22,0) not null,
+                           constraint fk_expense_project foreign key (project_id) references incubator_project(id) on delete cascade
+);
+create sequence seq_expense start with 1;
+--rollback not required
