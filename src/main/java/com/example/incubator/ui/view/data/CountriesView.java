@@ -1,8 +1,8 @@
 package com.example.incubator.ui.view.data;
 
-import com.example.incubator.back.service.CountriesService;
-import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.back.service.dto.country.CountryDto;
+import com.example.incubator.backend.service.CountriesService;
+import com.example.incubator.backend.service.dto.ServiceResult;
+import com.example.incubator.backend.service.dto.country.CountryDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.CountryForm;
 import com.example.incubator.ui.form.dto.EditCountryDto;

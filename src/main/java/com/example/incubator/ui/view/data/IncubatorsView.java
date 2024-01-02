@@ -1,10 +1,10 @@
 package com.example.incubator.ui.view.data;
 
-import com.example.incubator.back.service.CountriesService;
-import com.example.incubator.back.service.IncubatorService;
-import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.ServiceResult;
-import com.example.incubator.back.service.dto.incubator.IncubatorDto;
+import com.example.incubator.backend.service.CountriesService;
+import com.example.incubator.backend.service.IncubatorService;
+import com.example.incubator.backend.service.UserService;
+import com.example.incubator.backend.service.dto.ServiceResult;
+import com.example.incubator.backend.service.dto.incubator.IncubatorDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.IncubatorForm;
 import com.example.incubator.ui.form.dto.EditIncubatorDto;
@@ -49,7 +49,7 @@ public class IncubatorsView extends VerticalLayout {
         configureGrid();
         configureIncubatorForm(userDetails);
 
-        add(getToolBar(userDetails), getContent());
+        add(getToolBar(), getContent());
 
         closeEditor();
         updateIncubatorList();
@@ -77,7 +77,7 @@ public class IncubatorsView extends VerticalLayout {
         incubatorForm.addCloseEditorListener(e -> closeEditor());
     }
 
-    private HorizontalLayout getToolBar(UserDetails userDetails) {
+    private HorizontalLayout getToolBar() {
         filterText = new TextField();
         filterText.setPlaceholder("Filter incubator by name or founder ...");
         filterText.setClearButtonVisible(true);

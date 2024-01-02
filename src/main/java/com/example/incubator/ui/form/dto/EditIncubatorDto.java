@@ -1,7 +1,7 @@
 package com.example.incubator.ui.form.dto;
 
-import com.example.incubator.back.service.dto.country.CountryDto;
-import com.example.incubator.back.service.dto.user.UserDto;
+import com.example.incubator.backend.service.dto.country.CountryDto;
+import com.example.incubator.backend.service.dto.user.UserDto;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;

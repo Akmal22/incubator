@@ -1,12 +1,13 @@
 package com.example.incubator.ui;
 
-import com.example.incubator.back.entity.user.Role;
-import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.security.SecurityService;
+import com.example.incubator.backend.entity.user.Role;
+import com.example.incubator.backend.service.UserService;
+import com.example.incubator.backend.service.security.SecurityService;
 import com.example.incubator.ui.security.ChangePasswordDialog;
 import com.example.incubator.ui.view.AboutUsView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
+import com.example.incubator.ui.view.data.ClientsView;
 import com.example.incubator.ui.view.data.CountriesView;
 import com.example.incubator.ui.view.data.IncubatorsView;
 import com.example.incubator.ui.view.data.ProjectsView;
@@ -120,12 +121,11 @@ public class MainLayout extends AppLayout {
 
         if (isAdmin) {
             verticalLayout.add(new RouterLink("Countries", CountriesView.class));
-            verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
-            verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
-        } else {
-            verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
-            verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
         }
+
+        verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
+        verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
+        verticalLayout.add(new RouterLink("Clients info", ClientsView.class));
 
         accordion.add("Data", verticalLayout);
 

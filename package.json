@@ -1,6 +1,6 @@
 {
-  "name": "no-name",
   "license": "UNLICENSED",
+  "name": "no-name",
   "dependencies": {
     "@polymer/polymer": "3.5.1",
     "@vaadin/accordion": "24.0.3",
@@ -70,12 +70,15 @@
     "lit": "2.6.1"
   },
   "devDependencies": {
+    "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-replace": "5.0.2",
     "@rollup/pluginutils": "5.0.2",
     "async": "3.2.2",
     "glob": "7.2.3",
     "mkdirp": "1.0.4",
     "rollup-plugin-brotli": "3.1.0",
+    "rollup-plugin-lit-css": "^2.1.0",
+    "rollup-plugin-styles": "^3.14.1",
     "strip-css-comments": "5.0.0",
     "transform-ast": "2.4.4",
     "typescript": "4.9.5",
@@ -170,7 +173,7 @@
       "workbox-core": "6.5.4",
       "workbox-precaching": "6.5.4"
     },
-    "hash": "5883787ced3ee8c4395a810e1f54c88a01ecf208e950965759834eb640dcf5a0"
+    "hash": "4a0520ef41c2a5e43d728c809c5bc4ea120e34078d7e71b7e7715098ad2bd3d5"
   },
   "overrides": {
     "@vaadin/bundles": "$@vaadin/bundles",
@@ -232,12 +235,12 @@
     "@vaadin/vaadin-usage-statistics": "$@vaadin/vaadin-usage-statistics",
     "@vaadin/vertical-layout": "$@vaadin/vertical-layout",
     "@vaadin/virtual-list": "$@vaadin/virtual-list",
-    "@vaadin/common-frontend": "$@vaadin/common-frontend",
-    "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
-    "lit": "$lit",
     "@polymer/polymer": "$@polymer/polymer",
     "@vaadin/charts": "$@vaadin/charts",
+    "@vaadin/common-frontend": "$@vaadin/common-frontend",
     "@vaadin/vaadin-themable-mixin": "$@vaadin/vaadin-themable-mixin",
-    "date-fns": "$date-fns"
+    "construct-style-sheets-polyfill": "$construct-style-sheets-polyfill",
+    "date-fns": "$date-fns",
+    "lit": "$lit"
   }
 }

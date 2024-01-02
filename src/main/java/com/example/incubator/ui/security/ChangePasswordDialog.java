@@ -1,9 +1,9 @@
 package com.example.incubator.ui.security;
 
 
-import com.example.incubator.back.service.UserService;
-import com.example.incubator.back.service.dto.user.ChangePasswordDto;
-import com.example.incubator.back.service.dto.ServiceResult;
+import com.example.incubator.backend.service.UserService;
+import com.example.incubator.backend.service.dto.user.ChangePasswordDto;
+import com.example.incubator.backend.service.dto.ServiceResult;
 import com.example.incubator.ui.form.ChangePasswordForm;
 import com.vaadin.flow.component.Key;
 import com.vaadin.flow.component.button.Button;
