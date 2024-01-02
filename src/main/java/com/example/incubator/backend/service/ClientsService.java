@@ -12,6 +12,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Slf4j
@@ -48,6 +49,11 @@ public class ClientsService {
                     log.error("Error while saving clients info. No project with id [{}]", project.getId());
                     throw new IllegalArgumentException("No project found");
                 });
+        Optional<ClientsEntity> optionalClientsEntity = clientsRepository.findByProjectEntity(incubatorProjectEntity);
+        if (optionalClientsEntity.isPresent()) {
+            log.error("Error while creating clients info, clients info data for project [{}] already exists", incubatorProjectEntity.getName());
+            return new ServiceResult(false, "Clients info for specified project already exists");
+        }
         ClientsEntity clientsEntity = new ClientsEntity();
         clientsEntity.setProjectEntity(incubatorProjectEntity);
         clientsEntity.setApplications(clientsDto.getApplications());
@@ -66,10 +72,24 @@ public class ClientsService {
                     throw new IllegalArgumentException("Client info not found");
                 });
 
-        clientsDto.setApplications(clientsDto.getApplications());
-        clientsDto.setAccepted(clientsDto.getAccepted());
-        clientsDto.setGraduated(clientsDto.getGraduated());
-        clientsDto.setFailed(clientsDto.getFailed());
+        IncubatorProjectDto project = clientsDto.getIncubatorProjectDto();
+        IncubatorProjectEntity incubatorProjectEntity = incubatorProjectRepository.findById(project.getId())
+                .orElseThrow(() -> {
+                    log.error("Error while saving clients info. No project with id [{}]", project.getId());
+                    throw new IllegalArgumentException("No project found");
+                });
+
+        Optional<ClientsEntity> optionalClientsEntity = clientsRepository.findByProjectEntity(incubatorProjectEntity);
+        if (optionalClientsEntity.isPresent() && !optionalClientsEntity.get().getId().equals(clientsEntity.getId())) {
+            log.error("Error while updating projects clients info. Project [{}] already has clients info entity", project.getName());
+            return new ServiceResult(false, String.format("Project [%s] already has clients info entity", project.getName()));
+        }
+
+        clientsEntity.setProjectEntity(incubatorProjectEntity);
+        clientsEntity.setApplications(clientsDto.getApplications());
+        clientsEntity.setAccepted(clientsDto.getAccepted());
+        clientsEntity.setGraduated(clientsDto.getGraduated());
+        clientsEntity.setFailed(clientsDto.getFailed());
         clientsRepository.save(clientsEntity);
 
         return new ServiceResult(true, null);
