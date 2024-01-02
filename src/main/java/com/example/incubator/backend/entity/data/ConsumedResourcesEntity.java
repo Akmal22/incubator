@@ -1,6 +1,5 @@
 package com.example.incubator.backend.entity.data;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -22,21 +21,21 @@ public class ConsumedResourcesEntity {
     @SequenceGenerator(name = "resourcesSequence", sequenceName = "SEQ_RESOURCES", allocationSize = 1)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private IncubatorProjectEntity projectEntity;
 
     @Column(name = "involved_managers", nullable = false)
-    private Long involvedManagers;
+    private Integer involvedManagers;
 
     @Column(name = "involved_coaches", nullable = false)
-    private Long involvedCoaches;
+    private Integer involvedCoaches;
 
     @Column(name = "involved_mentors", nullable = false)
-    private Long involvedMentors;
+    private Integer involvedMentors;
 
     @Column(name = "used_services", nullable = false)
-    private Long usedServices;
+    private Integer usedServices;
 
     @Column(name = "rent_space", nullable = false)
     private Double rentSpace;
