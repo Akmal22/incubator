@@ -3,7 +3,7 @@ package com.example.incubator.ui.view.data;
 import com.example.incubator.backend.service.ClientsService;
 import com.example.incubator.backend.service.IncubatorProjectService;
 import com.example.incubator.backend.service.dto.ServiceResult;
-import com.example.incubator.backend.service.dto.clients.ClientsDto;
+import com.example.incubator.backend.service.dto.ClientsDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.ClientsForm;
 import com.example.incubator.ui.form.dto.EditClientsDto;
@@ -111,7 +111,7 @@ public class ClientsView extends VerticalLayout {
     }
 
     private void deleteClientsDto(ClientsForm.DeleteEvent event) {
-        clientsService.deleteClientDto(convertEditClients(event.getEditClientsDto()));
+        clientsService.deleteClientsInfo(convertEditClients(event.getEditClientsDto()));
         updateClientsList();
         closeEditor();
     }

@@ -5,7 +5,7 @@ import com.example.incubator.backend.entity.data.IncubatorProjectEntity;
 import com.example.incubator.backend.repo.ClientsRepository;
 import com.example.incubator.backend.repo.IncubatorProjectRepository;
 import com.example.incubator.backend.service.dto.ServiceResult;
-import com.example.incubator.backend.service.dto.clients.ClientsDto;
+import com.example.incubator.backend.service.dto.ClientsDto;
 import com.example.incubator.backend.service.dto.incubator.IncubatorProjectDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -21,7 +21,6 @@ import java.util.stream.Collectors;
 public class ClientsService {
     private final ClientsRepository clientsRepository;
     private final IncubatorProjectRepository incubatorProjectRepository;
-    private final IncubatorProjectService incubatorProjectService;
 
     public List<ClientsDto> findByIncubatorFilterText(String filterText) {
         return clientsRepository.findAllByProjectName(filterText)
@@ -30,7 +29,7 @@ public class ClientsService {
                 .collect(Collectors.toList());
     }
 
-    public ServiceResult deleteClientDto(ClientsDto clientsDto) {
+    public ServiceResult deleteClientsInfo(ClientsDto clientsDto) {
         ClientsEntity clientsEntity = clientsRepository.findById(clientsDto.getId())
                 .orElseThrow(() -> {
                     log.error("Client information with id [{}] not found", clientsDto.getId());

@@ -3,7 +3,7 @@ package com.example.incubator.backend.service;
 import com.example.incubator.backend.entity.data.CountryEntity;
 import com.example.incubator.backend.repo.CountryRepository;
 import com.example.incubator.backend.service.dto.ServiceResult;
-import com.example.incubator.backend.service.dto.country.CountryDto;
+import com.example.incubator.backend.service.dto.CountryDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.data.domain.Pageable;
