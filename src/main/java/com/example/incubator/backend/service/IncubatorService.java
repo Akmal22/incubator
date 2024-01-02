@@ -11,6 +11,7 @@ import com.example.incubator.backend.service.dto.ServiceResult;
 import com.example.incubator.backend.service.dto.incubator.IncubatorDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
@@ -95,20 +96,20 @@ public class IncubatorService {
                 .collect(Collectors.toList());
     }
 
-    public List<IncubatorDto> getManagerIncubators(String managerLogin) {
+    public List<IncubatorDto> getManagerIncubatorsPageable(String managerLogin, Pageable pageable) {
         UserEntity manager = userRepository.findByUsernameAndRole(managerLogin, Role.ROLE_BI_MANAGER)
                 .orElseThrow(() -> {
                     log.error("Manager with login {} not found", managerLogin);
                     throw new UsernameNotFoundException("User not found");
                 });
 
-        return incubatorRepository.findAllByManager(manager).stream()
+        return incubatorRepository.findAllByManager(manager, pageable).stream()
                 .map(IncubatorService::convertIncubatorEntity)
                 .collect(Collectors.toList());
     }
 
-    public List<IncubatorDto> getAllIncubators() {
-        return incubatorRepository.findAll().stream()
+    public List<IncubatorDto> getAllIncubators(Pageable pageable) {
+        return incubatorRepository.findAll(pageable).stream()
                 .map(IncubatorService::convertIncubatorEntity)
                 .collect(Collectors.toList());
     }

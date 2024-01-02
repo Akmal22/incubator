@@ -1,5 +1,7 @@
 package com.example.incubator.ui.form;
 
+import com.example.incubator.backend.entity.user.Role;
+import com.example.incubator.backend.service.IncubatorService;
 import com.example.incubator.backend.service.dto.incubator.IncubatorDto;
 import com.example.incubator.ui.form.dto.EditProjectDto;
 import com.vaadin.flow.component.ComponentEvent;
@@ -12,22 +14,16 @@ import com.vaadin.flow.component.datepicker.DatePicker;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.IntegerField;
-import com.vaadin.flow.component.textfield.NumberField;
 import com.vaadin.flow.component.textfield.TextField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
-
-import java.util.List;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 public class ProjectForm extends FormLayout {
     TextField name = new TextField("Incubator project name");
     ComboBox<IncubatorDto> incubator = new ComboBox<>("Incubator");
-    NumberField income = new NumberField("Income");
-    NumberField expenses = new NumberField("Expenses");
-    IntegerField residentApplications = new IntegerField("Applications");
-    IntegerField acceptedResidentApplications = new IntegerField("Accepted applications");
-    IntegerField graduatedResidentsCount = new IntegerField("Graduated residents");
     DatePicker startDate = new DatePicker("Started date");
     DatePicker endDate = new DatePicker("End date");
 
@@ -38,16 +34,23 @@ public class ProjectForm extends FormLayout {
     Binder<EditProjectDto> binder = new BeanValidationBinder<>(EditProjectDto.class);
     Label errorMessageLabel = new Label();
 
-    public ProjectForm(List<IncubatorDto> incubators) {
+    public ProjectForm(UserDetails userDetails, IncubatorService incubatorService) {
         addClassName("contact-form");
         binder.bindInstanceFields(this);
 
-        incubator.setItems(incubators);
+        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
+            incubator.setItemsWithFilterConverter(
+                    query -> incubatorService.getManagerIncubatorsPageable(userDetails.getUsername(), PageRequest.of(query.getPage(), query.getLimit())).stream(),
+                    incubator -> incubator);
+        } else {
+            incubator.setItemsWithFilterConverter(
+                    query -> incubatorService.getAllIncubators(PageRequest.of(query.getPage(), query.getLimit())).stream(),
+                    incubator -> incubator);
+        }
         incubator.setItemLabelGenerator(IncubatorDto::getIncubatorName);
 
         errorMessageLabel.getStyle().set("color", "Red");
-        add(name, incubator, income, expenses, residentApplications, acceptedResidentApplications,
-                graduatedResidentsCount, startDate, endDate, getButtonsLayout());
+        add(name, incubator, startDate, endDate, getButtonsLayout());
     }
 
     public Label getErrorMessageLabel() {

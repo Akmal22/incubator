@@ -15,16 +15,6 @@ public class EditProjectDto {
     @NotNull
     private IncubatorDto incubator;
     @NotNull
-    private Double income;
-    @NotNull
-    private Double expenses;
-    @NotNull
-    private Integer residentApplications;
-    @NotNull
-    private Integer acceptedResidentApplications;
-    @NotNull
-    private Integer graduatedResidentsCount;
-    @NotNull
     private LocalDate startDate;
     private LocalDate endDate;
 }

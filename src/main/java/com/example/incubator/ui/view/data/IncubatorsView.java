@@ -49,7 +49,7 @@ public class IncubatorsView extends VerticalLayout {
         configureGrid();
         configureIncubatorForm(userDetails);
 
-        add(getToolBar(userDetails), getContent());
+        add(getToolBar(), getContent());
 
         closeEditor();
         updateIncubatorList();
@@ -77,7 +77,7 @@ public class IncubatorsView extends VerticalLayout {
         incubatorForm.addCloseEditorListener(e -> closeEditor());
     }
 
-    private HorizontalLayout getToolBar(UserDetails userDetails) {
+    private HorizontalLayout getToolBar() {
         filterText = new TextField();
         filterText.setPlaceholder("Filter incubator by name or founder ...");
         filterText.setClearButtonVisible(true);

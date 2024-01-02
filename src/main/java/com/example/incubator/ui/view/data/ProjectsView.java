@@ -1,14 +1,12 @@
 package com.example.incubator.ui.view.data;
 
-import com.example.incubator.backend.entity.user.Role;
 import com.example.incubator.backend.service.IncubatorProjectService;
 import com.example.incubator.backend.service.IncubatorService;
 import com.example.incubator.backend.service.dto.ServiceResult;
-import com.example.incubator.backend.service.dto.incubator.IncubatorDto;
 import com.example.incubator.backend.service.dto.incubator.IncubatorProjectDto;
 import com.example.incubator.ui.MainLayout;
-import com.example.incubator.ui.form.dto.EditProjectDto;
 import com.example.incubator.ui.form.ProjectForm;
+import com.example.incubator.ui.form.dto.EditProjectDto;
 import com.vaadin.flow.component.button.Button;
 import com.vaadin.flow.component.grid.Grid;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
@@ -19,10 +17,8 @@ import com.vaadin.flow.router.PageTitle;
 import com.vaadin.flow.router.Route;
 import com.vaadin.flow.spring.security.AuthenticationContext;
 import jakarta.annotation.security.RolesAllowed;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.List;
 import java.util.stream.Collectors;
 
 @RolesAllowed({"ADMIN", "BI_MANAGER"})
@@ -51,7 +47,7 @@ public class ProjectsView extends VerticalLayout {
         configureGrid();
         configureProjectForm(userDetails);
 
-        add(getToolBar(userDetails), getContent());
+        add(getToolBar(), getContent());
 
         closeEditor();
         updateProjectsList();
@@ -67,7 +63,7 @@ public class ProjectsView extends VerticalLayout {
         return content;
     }
 
-    private HorizontalLayout getToolBar(UserDetails userDetails) {
+    private HorizontalLayout getToolBar() {
         filterText = new TextField();
         filterText.setPlaceholder("Filter incubator project by name or founder ...");
         filterText.setClearButtonVisible(true);
@@ -83,13 +79,7 @@ public class ProjectsView extends VerticalLayout {
     }
 
     private void configureProjectForm(UserDetails userDetails) {
-        List<IncubatorDto> incubators;
-        if (userDetails.getAuthorities().contains(new SimpleGrantedAuthority(Role.ROLE_BI_MANAGER.name()))) {
-            incubators = incubatorService.getManagerIncubators(userDetails.getUsername());
-        } else {
-            incubators = incubatorService.getAllIncubators();
-        }
-        projectForm = new ProjectForm(incubators);
+        projectForm = new ProjectForm(userDetails, incubatorService);
 
         projectForm.setWidth("25em");
         projectForm.addSaveListener(this::saveProject);
@@ -137,8 +127,7 @@ public class ProjectsView extends VerticalLayout {
 
         projectsGrid.addClassName("contact-grid");
         projectsGrid.setSizeFull();
-        projectsGrid.setColumns("name", "income", "expenses", "residentApplications", "acceptedResidentApplications",
-                "graduatedResidentsCount", "startDate", "endDate");
+        projectsGrid.setColumns("name", "startDate", "endDate");
         projectsGrid.addColumn(editProjectDto -> editProjectDto.getIncubator().getIncubatorName()).setHeader("Incubator");
 
         projectsGrid.getColumns().forEach(col -> col.setAutoWidth(true));
@@ -168,11 +157,6 @@ public class ProjectsView extends VerticalLayout {
         editProjectDto.setId(projectDto.getId());
         editProjectDto.setName(projectDto.getName());
         editProjectDto.setIncubator(projectDto.getIncubatorDto());
-        editProjectDto.setIncome(projectDto.getIncome());
-        editProjectDto.setExpenses(projectDto.getExpenses());
-        editProjectDto.setResidentApplications(projectDto.getResidentApplications());
-        editProjectDto.setAcceptedResidentApplications(projectDto.getAcceptedResidents());
-        editProjectDto.setGraduatedResidentsCount(projectDto.getGraduatedResidents());
         editProjectDto.setStartDate(projectDto.getStartDate());
         editProjectDto.setEndDate(projectDto.getEndDate());
 
@@ -184,11 +168,6 @@ public class ProjectsView extends VerticalLayout {
                 .setId(editProjectDto.getId())
                 .setName(editProjectDto.getName())
                 .setIncubatorDto(editProjectDto.getIncubator())
-                .setIncome(editProjectDto.getIncome())
-                .setExpenses(editProjectDto.getExpenses())
-                .setResidentApplications(editProjectDto.getResidentApplications())
-                .setAcceptedResidents(editProjectDto.getAcceptedResidentApplications())
-                .setGraduatedResidents(editProjectDto.getGraduatedResidentsCount())
                 .setStartDate(editProjectDto.getStartDate())
                 .setEndDate(editProjectDto.getEndDate());
     }

@@ -124,33 +124,33 @@ public class ReportView extends VerticalLayout {
             founded = incubatorDto.getFounded().toString();
             founder = incubatorDto.getFounder();
             projectName = incubatorDto.getIncubatorName();
-            incomeAmount = incubatorProjectDto.getIncome();
-            expenseAmount = incubatorProjectDto.getExpenses();
-            applications = incubatorProjectDto.getResidentApplications();
-            accepted = incubatorProjectDto.getAcceptedResidents();
-            graduated = incubatorProjectDto.getGraduatedResidents();
+//            incomeAmount = incubatorProjectDto.getIncome();
+//            expenseAmount = incubatorProjectDto.getExpenses();
+//            applications = incubatorProjectDto.getResidentApplications();
+//            accepted = incubatorProjectDto.getAcceptedResidents();
+//            graduated = incubatorProjectDto.getGraduatedResidents();
         } else if (isNotBlank(incubatorName)) {
             IncubatorDto incubatorDto = reportService.getIncubator(incubatorName);
             founded = incubatorDto.getFounded().toString();
             founder = incubatorDto.getFounder();
-            incomeAmount = incubatorDto.getIncubatorProjects().stream().mapToDouble(IncubatorProjectDto::getIncome).sum();
-            expenseAmount = incubatorDto.getIncubatorProjects().stream().mapToDouble(IncubatorProjectDto::getExpenses).sum();
-            applications = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getResidentApplications).sum();
-            accepted = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getAcceptedResidents).sum();
-            graduated = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getGraduatedResidents).sum();
+//            incomeAmount = incubatorDto.getIncubatorProjects().stream().mapToDouble(IncubatorProjectDto::getIncome).sum();
+//            expenseAmount = incubatorDto.getIncubatorProjects().stream().mapToDouble(IncubatorProjectDto::getExpenses).sum();
+//            applications = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getResidentApplications).sum();
+//            accepted = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getAcceptedResidents).sum();
+//            graduated = incubatorDto.getIncubatorProjects().stream().mapToLong(IncubatorProjectDto::getGraduatedResidents).sum();
         } else {
             List<IncubatorDto> incubators = reportService.getIncubatorsByCountry(countryName);
             List<IncubatorProjectDto> projects = incubators.stream()
                     .flatMap(i -> i.getIncubatorProjects().stream()).toList();
 
-            incomeAmount = projects.stream().mapToDouble(IncubatorProjectDto::getIncome).sum();
-            expenseAmount = projects.stream().mapToDouble(IncubatorProjectDto::getExpenses).sum();
-            applications = projects.stream().mapToLong(IncubatorProjectDto::getResidentApplications).sum();
-            accepted = projects.stream().mapToLong(IncubatorProjectDto::getAcceptedResidents).sum();
-            graduated = projects.stream().mapToLong(IncubatorProjectDto::getGraduatedResidents).sum();
+//            incomeAmount = projects.stream().mapToDouble(IncubatorProjectDto::getIncome).sum();
+//            expenseAmount = projects.stream().mapToDouble(IncubatorProjectDto::getExpenses).sum();
+//            applications = projects.stream().mapToLong(IncubatorProjectDto::getResidentApplications).sum();
+//            accepted = projects.stream().mapToLong(IncubatorProjectDto::getAcceptedResidents).sum();
+//            graduated = projects.stream().mapToLong(IncubatorProjectDto::getGraduatedResidents).sum();
         }
 
-        shortReport = new ShortReport(getIncomeChart(incomeAmount, expenseAmount), getResidentsChart(applications, accepted, graduated),
-                founded, founder, projectName);
+//        shortReport = new ShortReport(getIncomeChart(incomeAmount, expenseAmount), getResidentsChart(applications, accepted, graduated),
+//                founded, founder, projectName);
     }
 }

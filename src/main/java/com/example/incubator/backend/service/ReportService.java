@@ -67,11 +67,6 @@ public class ReportService {
     private IncubatorProjectDto convertIncubatorProjectEntity(IncubatorProjectEntity incubatorProjectEntity) {
         return new IncubatorProjectDto()
                 .setName(incubatorProjectEntity.getName())
-                .setIncome(incubatorProjectEntity.getIncome())
-                .setExpenses(incubatorProjectEntity.getExpenses())
-                .setResidentApplications(incubatorProjectEntity.getResidentApplications())
-                .setAcceptedResidents(incubatorProjectEntity.getAcceptedResidentApplications())
-                .setGraduatedResidents(incubatorProjectEntity.getGraduatedResidentsCount())
                 .setStartDate(incubatorProjectEntity.getStartedDate())
                 .setEndDate(incubatorProjectEntity.getEndDate())
                 .setIncubatorDto(new IncubatorDto()

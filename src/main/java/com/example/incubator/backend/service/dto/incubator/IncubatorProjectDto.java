@@ -11,11 +11,6 @@ public class IncubatorProjectDto {
     private Long id;
     private String name;
     private IncubatorDto incubatorDto;
-    private Double income;
-    private Double expenses;
-    private int residentApplications;
-    private int acceptedResidents;
-    private int graduatedResidents;
     private LocalDate startDate;
     private LocalDate endDate;
 }

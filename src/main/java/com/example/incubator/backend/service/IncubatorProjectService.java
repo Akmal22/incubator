@@ -2,17 +2,22 @@ package com.example.incubator.backend.service;
 
 import com.example.incubator.backend.entity.data.IncubatorEntity;
 import com.example.incubator.backend.entity.data.IncubatorProjectEntity;
+import com.example.incubator.backend.entity.user.UserEntity;
 import com.example.incubator.backend.repo.IncubatorProjectRepository;
 import com.example.incubator.backend.repo.IncubatorRepository;
+import com.example.incubator.backend.repo.UserRepository;
 import com.example.incubator.backend.service.dto.ServiceResult;
 import com.example.incubator.backend.service.dto.incubator.IncubatorProjectDto;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
+
+import static org.hibernate.validator.internal.util.Contracts.assertTrue;
 
 @Slf4j
 @Service
@@ -20,6 +25,7 @@ import java.util.stream.Collectors;
 public class IncubatorProjectService {
     private final IncubatorProjectRepository incubatorProjectRepository;
     private final IncubatorRepository incubatorRepository;
+    private final UserRepository userRepository;
 
     public List<IncubatorProjectDto> findAllByFilterText(String filterText) {
         return incubatorProjectRepository.findAllByFilterText(filterText).stream()
@@ -38,11 +44,6 @@ public class IncubatorProjectService {
         IncubatorProjectEntity incubatorProjectEntity = new IncubatorProjectEntity();
         incubatorProjectEntity.setName(incubatorProjectDto.getName());
         incubatorProjectEntity.setIncubator(incubator);
-        incubatorProjectEntity.setIncome(incubatorProjectDto.getIncome());
-        incubatorProjectEntity.setExpenses(incubatorProjectDto.getExpenses());
-        incubatorProjectEntity.setResidentApplications(incubatorProjectDto.getResidentApplications());
-        incubatorProjectEntity.setAcceptedResidentApplications(incubatorProjectDto.getResidentApplications());
-        incubatorProjectEntity.setGraduatedResidentsCount(incubatorProjectDto.getGraduatedResidents());
         incubatorProjectEntity.setStartedDate(incubatorProjectDto.getStartDate());
         incubatorProjectEntity.setEndDate(incubatorProjectDto.getEndDate());
 
@@ -57,11 +58,6 @@ public class IncubatorProjectService {
 
         incubatorProject.setName(incubatorProjectDto.getName());
         incubatorProject.setIncubator(incubator);
-        incubatorProject.setIncome(incubatorProjectDto.getIncome());
-        incubatorProject.setExpenses(incubatorProjectDto.getExpenses());
-        incubatorProject.setResidentApplications(incubatorProjectDto.getResidentApplications());
-        incubatorProject.setAcceptedResidentApplications(incubatorProjectDto.getResidentApplications());
-        incubatorProject.setGraduatedResidentsCount(incubatorProjectDto.getGraduatedResidents());
         incubatorProject.setStartedDate(incubatorProjectDto.getStartDate());
         incubatorProject.setEndDate(incubatorProjectDto.getEndDate());
 
@@ -75,6 +71,20 @@ public class IncubatorProjectService {
         incubatorProjectRepository.delete(incubatorProject);
 
         return new ServiceResult(true, null);
+    }
+
+    public List<IncubatorProjectDto> getManagerAllProjects(String managerLogin, String query, Pageable pageable) {
+        Optional<UserEntity> optionalManager = userRepository.findByUsername(managerLogin);
+        assertTrue(optionalManager.isPresent(), "manager not found");
+        return incubatorProjectRepository.findManagerProjectsByFilterText(optionalManager.get(), query, pageable).stream()
+                .map(IncubatorProjectService::convertIncubatorProjectEntity)
+                .collect(Collectors.toList());
+    }
+
+    public List<IncubatorProjectDto> getAllProjects(String query, Pageable pageable) {
+        return incubatorProjectRepository.findAllByFilterText(query, pageable).stream()
+                .map(IncubatorProjectService::convertIncubatorProjectEntity)
+                .collect(Collectors.toList());
     }
 
     private IncubatorProjectEntity getIncubatorProject(long projectId) {
@@ -96,11 +106,6 @@ public class IncubatorProjectService {
                 .setId(incubatorProjectEntity.getId())
                 .setName(incubatorProjectEntity.getName())
                 .setIncubatorDto(IncubatorService.convertIncubatorEntity(incubatorProjectEntity.getIncubator()))
-                .setIncome(incubatorProjectEntity.getIncome())
-                .setExpenses(incubatorProjectEntity.getExpenses())
-                .setResidentApplications(incubatorProjectEntity.getResidentApplications())
-                .setAcceptedResidents(incubatorProjectEntity.getAcceptedResidentApplications())
-                .setGraduatedResidents(incubatorProjectEntity.getGraduatedResidentsCount())
                 .setStartDate(incubatorProjectEntity.getStartedDate())
                 .setEndDate(incubatorProjectEntity.getEndDate());
     }

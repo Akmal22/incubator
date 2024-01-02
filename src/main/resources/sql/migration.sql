@@ -19,8 +19,8 @@ CREATE SEQUENCE SEQ_USERS START WITH 1;
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from users where username='admin';
 INSERT INTO USERS(ID, UUID, USERNAME, EMAIL, PASSWORD, ROLE) VALUES (nextval('seq_users'), '00e384f5-2179-4b43-89db-aaad5f67040f', 'admin', 'akmal9433@gmail.com', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'ROLE_ADMIN');
-INSERT INTO USERS(ID, UUID, USERNAME, EMAIL, PASSWORD, ROLE) VALUES (nextval('seq_users'), 'dd502d8b-1222-4f19-8ac6-b71ae85425a8', 'user', 'user@mail.com', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'ROLE_BI_MANAGER');
-INSERT INTO USERS(ID, UUID, USERNAME, EMAIL, PASSWORD, ROLE) VALUES (nextval('seq_users'), 'e5f02d24-bd70-4ef1-9719-df5ab21f51d8', 'bi-manager', 'manager@mail.com', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'ROLE_USER');
+INSERT INTO USERS(ID, UUID, USERNAME, EMAIL, PASSWORD, ROLE) VALUES (nextval('seq_users'), 'dd502d8b-1222-4f19-8ac6-b71ae85425a8', 'user', 'user@mail.com', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'ROLE_USER');
+INSERT INTO USERS(ID, UUID, USERNAME, EMAIL, PASSWORD, ROLE) VALUES (nextval('seq_users'), 'e5f02d24-bd70-4ef1-9719-df5ab21f51d8', 'bi-manager', 'manager@mail.com', '$2a$10$GRLdNijSQMUvl/au9ofL.eDwmoohzzS7.rmNSJZ.0FxO/BTk76klW', 'ROLE_BI_MANAGER');
 --rollback not required
 
 --changeset rakhimbaev:changeset-2
@@ -30,15 +30,10 @@ create table country(
     id numeric(22,0) primary key,
     name varchar(256) not null unique
 );
---rollback not required
-
---changeset rakhimbaev:changeset-3
---preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
---precondition-sql-check expectedResult:0 select count(*) from information_schema.sequences where sequence_name = 'seq_country';
 create sequence seq_country start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-4
+--changeset rakhimbaev:changeset-3
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'INCUBATOR';
 create table incubator(
@@ -51,39 +46,24 @@ create table incubator(
     constraint fk_country foreign key (country_id) references country(id),
     constraint fk_manager foreign key (manager_id) references users(id)
 );
---rollback not required
-
---changeset rakhimbaev:changeset-5
---preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
---precondition-sql-check expectedResult:0 select count(*) from information_schema.sequences where sequence_name = 'seq_incubator';
 create sequence seq_incubator start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-6
+--changeset rakhimbaev:changeset-4
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'INCUBATOR_PROJECT';
 create table incubator_project(
     id numeric(22,0) primary key,
     name varchar(256) not null,
     incubator_id numeric(22,0) not null,
-    income numeric(22,2) not null,
-    expenses numeric(22,2) not null,
-    applications_count numeric(22) not null,
-    accepted_applications numeric(22) not null,
-    graduated_residents_count numeric(22) not null,
     started_date timestamp not null,
     end_date timestamp,
     constraint fk_incubator foreign key (incubator_id) references incubator(id) on delete cascade
 );
---rollback not required
-
---changeset rakhimbaev:changeset-7
---preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
---precondition-sql-check expectedResult:0 select count(*) from information_schema.sequences where sequence_name = 'seq_inc_project';
 create sequence seq_inc_project start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-8
+--changeset rakhimbaev:changeset-5
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'CLIENT';
 create table CLIENT(
@@ -98,22 +78,22 @@ create table CLIENT(
 create sequence seq_client start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-9
+--changeset rakhimbaev:changeset-6
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'REVENUE';
 create table REVENUE(
                        id numeric(22,0) primary key,
                        project_id numeric(22,0) not null,
-                       lease_revenue numeric(22,0) not null,
-                       services_revenue numeric(22,0) not null,
-                       sponsorship_revenue numeric(22,0) not null,
-                       grant_revenue numeric(22,0) not null,
+                       lease_revenue numeric(22,2) not null,
+                       services_revenue numeric(22,2) not null,
+                       sponsorship_revenue numeric(22,2) not null,
+                       grant_revenue numeric(22,2) not null,
                        constraint fk_revenue_project foreign key (project_id) references incubator_project(id) on delete cascade
 );
 create sequence seq_revenue start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-10
+--changeset rakhimbaev:changeset-7
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'CONSUMED_RESOURCES';
 create table CONSUMED_RESOURCES(
@@ -123,13 +103,13 @@ create table CONSUMED_RESOURCES(
                         involved_coaches numeric(22,0) not null,
                         involved_mentors numeric(22,0) not null,
                         used_services numeric(22,0) not null,
-                        rent_space numeric(22,0) not null,
+                        rent_space numeric(22,2) not null,
                         constraint fk_resources_project foreign key (project_id) references incubator_project(id) on delete cascade
 );
-create sequence seq_resources_project start with 1;
+create sequence seq_resources start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-11
+--changeset rakhimbaev:changeset-8
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'INVESTMENT';
 create table INVESTMENT(
@@ -142,18 +122,18 @@ create table INVESTMENT(
 create sequence seq_investment start with 1;
 --rollback not required
 
---changeset rakhimbaev:changeset-12
+--changeset rakhimbaev:changeset-9
 --preconditions onFail:MARK_RAN onError:HALT onUpdateSql:FAIL
 --precondition-sql-check expectedResult:0 select count(*) from information_schema.tables where upper(table_name) = 'EXPENSE';
 create table EXPENSE(
                            id numeric(22,0) primary key,
                            project_id numeric(22,0) not null,
-                           marketing numeric(22,0) not null,
-                           payroll numeric(22,0) not null,
-                           equipment numeric(22,0) not null,
-                           utilities numeric(22,0) not null,
-                           material numeric(22,0) not null,
-                           insurance numeric(22,0) not null,
+                           marketing numeric(22,2) not null,
+                           payroll numeric(22,2) not null,
+                           equipment numeric(22,2) not null,
+                           utilities numeric(22,2) not null,
+                           material numeric(22,2) not null,
+                           insurance numeric(22,2) not null,
                            constraint fk_expense_project foreign key (project_id) references incubator_project(id) on delete cascade
 );
 create sequence seq_expense start with 1;

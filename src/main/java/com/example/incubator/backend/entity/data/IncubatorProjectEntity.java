@@ -22,23 +22,17 @@ public class IncubatorProjectEntity {
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "incubatorProjectSequence")
     @SequenceGenerator(name = "incubatorProjectSequence", sequenceName = "SEQ_INC_PROJECT", allocationSize = 1)
     private long id;
+
     @Column(name = "name", nullable = false, unique = true)
     private String name;
+
     @ManyToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "INCUBATOR_ID", nullable = false)
     private IncubatorEntity incubator;
-    @Column(name = "income", nullable = false)
-    private Double income;
-    @Column(name = "expenses", nullable = false)
-    private Double expenses;
-    @Column(name = "applications_count", nullable = false)
-    private int residentApplications;
-    @Column(name = "accepted_applications", nullable = false)
-    private int acceptedResidentApplications;
-    @Column(name = "graduated_residents_count", nullable = false)
-    private int graduatedResidentsCount;
+
     @Column(name = "started_date", nullable = false)
     private LocalDate startedDate;
+
     @Column(name = "end_date")
     private LocalDate endDate;
 }

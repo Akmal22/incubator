@@ -3,6 +3,7 @@ package com.example.incubator.backend.repo;
 import com.example.incubator.backend.entity.data.CountryEntity;
 import com.example.incubator.backend.entity.data.IncubatorEntity;
 import com.example.incubator.backend.entity.user.UserEntity;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
@@ -24,5 +25,5 @@ public interface IncubatorRepository extends JpaRepository<IncubatorEntity, Long
 
     Optional<IncubatorEntity> findByName(String name);
 
-    List<IncubatorEntity> findAllByManager(UserEntity manager);
+    List<IncubatorEntity> findAllByManager(UserEntity manager, Pageable pageable);
 }
