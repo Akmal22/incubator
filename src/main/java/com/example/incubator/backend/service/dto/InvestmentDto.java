@@ -1,0 +1,14 @@
+package com.example.incubator.backend.service.dto;
+
+import com.example.incubator.backend.service.dto.incubator.IncubatorProjectDto;
+import lombok.Data;
+import lombok.experimental.Accessors;
+
+@Data
+@Accessors(chain = true)
+public class InvestmentDto {
+    private Long id;
+    private IncubatorProjectDto project;
+    private Integer investorsCount;
+    private Integer percentageOfInvestedClients;
+}

@@ -50,7 +50,7 @@ public class RevenueView extends VerticalLayout {
         add(getToolBar(), getContent());
 
         closeEditor();
-        updateClientsList();
+        updateRevenueList();
     }
 
     private HorizontalLayout getContent() {
@@ -68,7 +68,7 @@ public class RevenueView extends VerticalLayout {
         filterText.setPlaceholder("Filter revenue info by incubator project name ...");
         filterText.setClearButtonVisible(true);
         filterText.setValueChangeMode(ValueChangeMode.LAZY);
-        filterText.addValueChangeListener(e -> updateClientsList());
+        filterText.addValueChangeListener(e -> updateRevenueList());
 
         var addButton = new Button("Add revenue info");
         addButton.addClickListener(e -> addRevenueInfo());
@@ -88,7 +88,7 @@ public class RevenueView extends VerticalLayout {
 
         revenueForm.setWidth("25em");
         revenueForm.addSaveListener(this::saveRevenue);
-        revenueForm.addDeleteListener(this::deleteClientsDto);
+        revenueForm.addDeleteListener(this::deleteRevenue);
         revenueForm.addCloseEditorListener(e -> closeEditor());
     }
 
@@ -106,17 +106,17 @@ public class RevenueView extends VerticalLayout {
             revenueForm.getErrorMessageLabel().setText(serviceResult.getErrorMessage());
         } else {
             closeEditor();
-            updateClientsList();
+            updateRevenueList();
         }
     }
 
-    private void deleteClientsDto(RevenueForm.DeleteEvent event) {
+    private void deleteRevenue(RevenueForm.DeleteEvent event) {
         revenueService.deleteRevenue(convertEditRevenueDto(event.getEditRevenueDto()));
-        updateClientsList();
+        updateRevenueList();
         closeEditor();
     }
 
-    private void updateClientsList() {
+    private void updateRevenueList() {
         revenueDtoGrid.setItems(revenueService.getAllRevenueDtoByFilterText(filterText.getValue()).stream()
                 .map(this::convertRevenueDto)
                 .collect(Collectors.toList()));

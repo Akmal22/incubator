@@ -3,7 +3,7 @@ package com.example.incubator.ui.form;
 import com.example.incubator.backend.entity.user.Role;
 import com.example.incubator.backend.service.IncubatorProjectService;
 import com.example.incubator.backend.service.dto.incubator.IncubatorProjectDto;
-import com.example.incubator.ui.form.dto.EditRevenueDto;
+import com.example.incubator.ui.form.dto.EditInvestmentDto;
 import com.vaadin.flow.component.ComponentEvent;
 import com.vaadin.flow.component.ComponentEventListener;
 import com.vaadin.flow.component.Key;
@@ -13,28 +13,26 @@ import com.vaadin.flow.component.combobox.ComboBox;
 import com.vaadin.flow.component.formlayout.FormLayout;
 import com.vaadin.flow.component.html.Label;
 import com.vaadin.flow.component.orderedlayout.HorizontalLayout;
-import com.vaadin.flow.component.textfield.NumberField;
+import com.vaadin.flow.component.textfield.IntegerField;
 import com.vaadin.flow.data.binder.BeanValidationBinder;
 import com.vaadin.flow.data.binder.Binder;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-public class RevenueForm extends FormLayout {
+public class InvestmentForm extends FormLayout {
     ComboBox<IncubatorProjectDto> project = new ComboBox<>("Incubator project");
-    NumberField leaseRevenue = new NumberField("Lease revenue");
-    NumberField serviceRevenue = new NumberField("Service revenue");
-    NumberField sponsorshipRevenue = new NumberField("Sponsorship revenue");
-    NumberField grantRevenue = new NumberField("Grant revenue");
+    IntegerField investorsCount = new IntegerField("Investors count");
+    IntegerField percentageOfInvestedClients = new IntegerField("Percentage of invested clients");
 
     Button save = new Button("Save");
     Button delete = new Button("Delete");
     Button close = new Button("Cancel");
 
-    Binder<EditRevenueDto> binder = new BeanValidationBinder<>(EditRevenueDto.class);
+    Binder<EditInvestmentDto> binder = new BeanValidationBinder<>(EditInvestmentDto.class);
     Label errorMessageLabel = new Label();
 
-    public RevenueForm(UserDetails userDetails, IncubatorProjectService incubatorProjectService) {
+    public InvestmentForm(UserDetails userDetails, IncubatorProjectService incubatorProjectService) {
         addClassName("contact-form");
         binder.bindInstanceFields(this);
 
@@ -52,16 +50,21 @@ public class RevenueForm extends FormLayout {
         }
         project.setItemLabelGenerator(IncubatorProjectDto::getName);
 
+        investorsCount.setMin(0);
+        investorsCount.setMax(100);
+        investorsCount.setReadOnly(false);
+        percentageOfInvestedClients.setMin(0);
+        percentageOfInvestedClients.setReadOnly(false);
         errorMessageLabel.getStyle().set("color", "Red");
-        add(project, leaseRevenue, serviceRevenue, sponsorshipRevenue, grantRevenue, errorMessageLabel, getButtonsLayout());
+        add(project, investorsCount, percentageOfInvestedClients, errorMessageLabel, getButtonsLayout());
     }
 
     public Label getErrorMessageLabel() {
         return errorMessageLabel;
     }
 
-    public void setEditRevenueDto(EditRevenueDto editRevenueDto) {
-        binder.setBean(editRevenueDto);
+    public void setEditInvestmentDto(EditInvestmentDto editInvestmentDto) {
+        binder.setBean(editInvestmentDto);
     }
 
     private HorizontalLayout getButtonsLayout() {
@@ -73,8 +76,8 @@ public class RevenueForm extends FormLayout {
         close.addClickShortcut(Key.ESCAPE);
 
         save.addClickListener(e -> validateAndSave());
-        delete.addClickListener(e -> fireEvent(new RevenueForm.DeleteEvent(this, binder.getBean())));
-        close.addClickListener(e -> fireEvent(new RevenueForm.CloseEvent(this)));
+        delete.addClickListener(e -> fireEvent(new InvestmentForm.DeleteEvent(this, binder.getBean())));
+        close.addClickListener(e -> fireEvent(new InvestmentForm.CloseEvent(this)));
 
         binder.addStatusChangeListener(e -> save.setEnabled(binder.isValid()));
 
@@ -83,51 +86,51 @@ public class RevenueForm extends FormLayout {
 
     private void validateAndSave() {
         if (binder.isValid()) {
-            fireEvent(new RevenueForm.SaveEvent(this, binder.getBean()));
+            fireEvent(new InvestmentForm.SaveEvent(this, binder.getBean()));
         }
     }
 
-    public void addSaveListener(ComponentEventListener<RevenueForm.SaveEvent> listener) {
-        addListener(RevenueForm.SaveEvent.class, listener);
+    public void addSaveListener(ComponentEventListener<InvestmentForm.SaveEvent> listener) {
+        addListener(InvestmentForm.SaveEvent.class, listener);
     }
 
-    public void addDeleteListener(ComponentEventListener<RevenueForm.DeleteEvent> listener) {
-        addListener(RevenueForm.DeleteEvent.class, listener);
+    public void addDeleteListener(ComponentEventListener<InvestmentForm.DeleteEvent> listener) {
+        addListener(InvestmentForm.DeleteEvent.class, listener);
     }
 
-    public void addCloseEditorListener(ComponentEventListener<RevenueForm.CloseEvent> listener) {
-        addListener(RevenueForm.CloseEvent.class, listener);
+    public void addCloseEditorListener(ComponentEventListener<InvestmentForm.CloseEvent> listener) {
+        addListener(InvestmentForm.CloseEvent.class, listener);
     }
 
     // Event classes
-    public static abstract class RevenueFormEvent extends ComponentEvent<RevenueForm> {
-        private EditRevenueDto editRevenueDto;
+    public static abstract class InvestmentFormEvent extends ComponentEvent<InvestmentForm> {
+        private EditInvestmentDto editInvestmentDto;
 
-        public RevenueFormEvent(RevenueForm revenueForm, EditRevenueDto editRevenueDto) {
-            super(revenueForm, false);
-            this.editRevenueDto = editRevenueDto;
+        public InvestmentFormEvent(InvestmentForm investmentForm, EditInvestmentDto editInvestmentDto) {
+            super(investmentForm, false);
+            this.editInvestmentDto = editInvestmentDto;
         }
 
-        public EditRevenueDto getEditRevenueDto() {
-            return editRevenueDto;
-        }
-    }
-
-    public static class SaveEvent extends RevenueForm.RevenueFormEvent {
-        public SaveEvent(RevenueForm revenueForm, EditRevenueDto editRevenueDto) {
-            super(revenueForm, editRevenueDto);
+        public EditInvestmentDto getEditInvestmentDto() {
+            return editInvestmentDto;
         }
     }
 
-    public static class DeleteEvent extends RevenueForm.RevenueFormEvent {
-        public DeleteEvent(RevenueForm revenueForm, EditRevenueDto editRevenueDto) {
-            super(revenueForm, editRevenueDto);
+    public static class SaveEvent extends InvestmentForm.InvestmentFormEvent {
+        public SaveEvent(InvestmentForm investmentForm, EditInvestmentDto editInvestmentDto) {
+            super(investmentForm, editInvestmentDto);
         }
     }
 
-    public static class CloseEvent extends RevenueForm.RevenueFormEvent {
-        public CloseEvent(RevenueForm revenueForm) {
-            super(revenueForm, null);
+    public static class DeleteEvent extends InvestmentForm.InvestmentFormEvent {
+        public DeleteEvent(InvestmentForm investmentForm, EditInvestmentDto editInvestmentDto) {
+            super(investmentForm, editInvestmentDto);
+        }
+    }
+
+    public static class CloseEvent extends InvestmentForm.InvestmentFormEvent {
+        public CloseEvent(InvestmentForm investmentForm) {
+            super(investmentForm, null);
         }
     }
 }

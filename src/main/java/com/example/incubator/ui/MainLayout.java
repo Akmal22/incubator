@@ -10,6 +10,7 @@ import com.example.incubator.ui.view.UsersView;
 import com.example.incubator.ui.view.data.ClientsView;
 import com.example.incubator.ui.view.data.CountriesView;
 import com.example.incubator.ui.view.data.IncubatorsView;
+import com.example.incubator.ui.view.data.InvestmentView;
 import com.example.incubator.ui.view.data.ProjectsView;
 import com.example.incubator.ui.view.data.RevenueView;
 import com.vaadin.flow.component.accordion.Accordion;
@@ -128,6 +129,7 @@ public class MainLayout extends AppLayout {
         verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
         verticalLayout.add(new RouterLink("Clients info", ClientsView.class));
         verticalLayout.add(new RouterLink("Revenue info", RevenueView.class));
+        verticalLayout.add(new RouterLink("Investment info", InvestmentView.class));
 
         accordion.add("Data", verticalLayout);
 
