@@ -10,6 +10,7 @@ import com.example.incubator.ui.view.UsersView;
 import com.example.incubator.ui.view.data.ClientsView;
 import com.example.incubator.ui.view.data.ConsumedResourcesView;
 import com.example.incubator.ui.view.data.CountriesView;
+import com.example.incubator.ui.view.data.ExpenseView;
 import com.example.incubator.ui.view.data.IncubatorsView;
 import com.example.incubator.ui.view.data.InvestmentView;
 import com.example.incubator.ui.view.data.ProjectsView;
@@ -132,6 +133,7 @@ public class MainLayout extends AppLayout {
         verticalLayout.add(new RouterLink("Revenue info", RevenueView.class));
         verticalLayout.add(new RouterLink("Investment info", InvestmentView.class));
         verticalLayout.add(new RouterLink("Consumed resources", ConsumedResourcesView.class));
+        verticalLayout.add(new RouterLink("Expenses info", ExpenseView.class));
 
         accordion.add("Data", verticalLayout);
 
