@@ -96,9 +96,9 @@ public class ConsumedResourcesView extends VerticalLayout {
         EditConsumedResourcesDto editConsumedResourcesEvent = event.getEditConsumedResourcesEvent();
         ServiceResult serviceResult;
         if (editConsumedResourcesEvent.getId() == null) {
-            serviceResult = consumedResourcesService.createConsumedResources(convertEditConsumedResourcesDto(editConsumedResourcesEvent));
+            serviceResult = consumedResourcesService.createNewBIData(convertEditConsumedResourcesDto(editConsumedResourcesEvent));
         } else {
-            serviceResult = consumedResourcesService.updateConsumedResources(convertEditConsumedResourcesDto(editConsumedResourcesEvent));
+            serviceResult = consumedResourcesService.updateBIData(convertEditConsumedResourcesDto(editConsumedResourcesEvent));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -111,7 +111,7 @@ public class ConsumedResourcesView extends VerticalLayout {
     }
 
     private void deleteConsumedResources(ConsumedResourcesForm.DeleteEvent event) {
-        consumedResourcesService.deleteConsumedResources(convertEditConsumedResourcesDto(event.getEditConsumedResourcesEvent()));
+        consumedResourcesService.deleteData(convertEditConsumedResourcesDto(event.getEditConsumedResourcesEvent()));
         updateConsumedResourcesList();
         closeEditor();
     }
@@ -147,7 +147,7 @@ public class ConsumedResourcesView extends VerticalLayout {
     }
 
     private void updateConsumedResourcesList() {
-        editConsumedResourcesDtoGrid.setItems(consumedResourcesService.getAllConsumedResourcesByFilterText(filterText.getValue()).stream()
+        editConsumedResourcesDtoGrid.setItems(consumedResourcesService.findByIncubatorFilterText(filterText.getValue()).stream()
                 .map(this::convertConsumedResourcesDto)
                 .collect(Collectors.toList()));
     }

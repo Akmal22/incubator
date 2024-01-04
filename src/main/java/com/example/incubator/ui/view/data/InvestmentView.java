@@ -84,7 +84,7 @@ public class InvestmentView extends VerticalLayout {
     }
 
     private void updateInvestmentList() {
-        investmentDtoGrid.setItems(investmentService.getAllInvestmentDtoByFilterText(filterText.getValue()).stream()
+        investmentDtoGrid.setItems(investmentService.findByIncubatorFilterText(filterText.getValue()).stream()
                 .map(this::convertInvestmentDto)
                 .collect(Collectors.toList()));
     }
@@ -102,9 +102,9 @@ public class InvestmentView extends VerticalLayout {
         EditInvestmentDto editInvestmentDto = event.getEditInvestmentDto();
         ServiceResult serviceResult;
         if (editInvestmentDto.getId() == null) {
-            serviceResult = investmentService.createInvestment(convertEditInvestmentDto(editInvestmentDto));
+            serviceResult = investmentService.createNewBIData(convertEditInvestmentDto(editInvestmentDto));
         } else {
-            serviceResult = investmentService.updateInvestment(convertEditInvestmentDto(editInvestmentDto));
+            serviceResult = investmentService.updateBIData(convertEditInvestmentDto(editInvestmentDto));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -117,7 +117,7 @@ public class InvestmentView extends VerticalLayout {
     }
 
     private void deleteInvestment(InvestmentForm.DeleteEvent event) {
-        investmentService.deleteInvestment(convertEditInvestmentDto(event.getEditInvestmentDto()));
+        investmentService.deleteData(convertEditInvestmentDto(event.getEditInvestmentDto()));
         updateInvestmentList();
         closeEditor();
     }

@@ -88,9 +88,9 @@ public class ExpenseView extends VerticalLayout {
         EditExpenseDto editExpenseDto = event.getEditExpenseDto();
         ServiceResult serviceResult;
         if (editExpenseDto.getId() == null) {
-            serviceResult = expenseService.createExpense(convertEditExpenseDto(editExpenseDto));
+            serviceResult = expenseService.createNewBIData(convertEditExpenseDto(editExpenseDto));
         } else {
-            serviceResult = expenseService.updateExpense(convertEditExpenseDto(editExpenseDto));
+            serviceResult = expenseService.updateBIData(convertEditExpenseDto(editExpenseDto));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -123,13 +123,13 @@ public class ExpenseView extends VerticalLayout {
     }
 
     private void updateExpenseList() {
-        expenseDtoGrid.setItems(expenseService.getAllExpenseDtoByFilterText(filterText.getValue()).stream()
+        expenseDtoGrid.setItems(expenseService.findByIncubatorFilterText(filterText.getValue()).stream()
                 .map(this::convertExpenseDto)
                 .collect(Collectors.toList()));
     }
 
     private void deleteExpense(ExpenseForm.DeleteEvent event) {
-        expenseService.deleteExpense(convertEditExpenseDto(event.getEditExpenseDto()));
+        expenseService.deleteData(convertEditExpenseDto(event.getEditExpenseDto()));
         updateExpenseList();
         closeEditor();
     }

@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "EXPENSE")
-public class ExpenseEntity {
+public class ExpenseEntity implements BaseDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "expenseSequence")
     @SequenceGenerator(name = "expenseSequence", sequenceName = "SEQ_EXPENSE", allocationSize = 1)

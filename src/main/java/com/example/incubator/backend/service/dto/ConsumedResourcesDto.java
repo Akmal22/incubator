@@ -6,7 +6,8 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class ConsumedResourcesDto {
+public class ConsumedResourcesDto implements BaseDto {
+    private final String dataName = "consumed resources";
     private Long id;
     private IncubatorProjectDto project;
     private Integer involvedManagers;

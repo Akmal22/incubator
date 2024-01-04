@@ -96,9 +96,9 @@ public class RevenueView extends VerticalLayout {
         EditRevenueDto editRevenueDto = event.getEditRevenueDto();
         ServiceResult serviceResult;
         if (editRevenueDto.getId() == null) {
-            serviceResult = revenueService.createRevenue(convertEditRevenueDto(editRevenueDto));
+            serviceResult = revenueService.createNewBIData(convertEditRevenueDto(editRevenueDto));
         } else {
-            serviceResult = revenueService.updateRevenue(convertEditRevenueDto(editRevenueDto));
+            serviceResult = revenueService.updateBIData(convertEditRevenueDto(editRevenueDto));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -111,13 +111,13 @@ public class RevenueView extends VerticalLayout {
     }
 
     private void deleteRevenue(RevenueForm.DeleteEvent event) {
-        revenueService.deleteRevenue(convertEditRevenueDto(event.getEditRevenueDto()));
+        revenueService.deleteData(convertEditRevenueDto(event.getEditRevenueDto()));
         updateRevenueList();
         closeEditor();
     }
 
     private void updateRevenueList() {
-        revenueDtoGrid.setItems(revenueService.getAllRevenueDtoByFilterText(filterText.getValue()).stream()
+        revenueDtoGrid.setItems(revenueService.findByIncubatorFilterText(filterText.getValue()).stream()
                 .map(this::convertRevenueDto)
                 .collect(Collectors.toList()));
     }
@@ -155,7 +155,7 @@ public class RevenueView extends VerticalLayout {
     private EditRevenueDto convertRevenueDto(RevenueDto revenueDto) {
         EditRevenueDto editRevenueDto = new EditRevenueDto();
         editRevenueDto.setId(revenueDto.getId());
-        editRevenueDto.setProject(revenueDto.getIncubatorProjectDto());
+        editRevenueDto.setProject(revenueDto.getProject());
         editRevenueDto.setLeaseRevenue(revenueDto.getLeaseRevenue());
         editRevenueDto.setServiceRevenue(revenueDto.getServiceRevenue());
         editRevenueDto.setSponsorshipRevenue(revenueDto.getSponsorshipRevenue());
@@ -167,7 +167,7 @@ public class RevenueView extends VerticalLayout {
     private RevenueDto convertEditRevenueDto(EditRevenueDto editRevenueDto) {
         return new RevenueDto()
                 .setId(editRevenueDto.getId())
-                .setIncubatorProjectDto(editRevenueDto.getProject())
+                .setProject(editRevenueDto.getProject())
                 .setLeaseRevenue(editRevenueDto.getLeaseRevenue())
                 .setServiceRevenue(editRevenueDto.getServiceRevenue())
                 .setSponsorshipRevenue(editRevenueDto.getSponsorshipRevenue())

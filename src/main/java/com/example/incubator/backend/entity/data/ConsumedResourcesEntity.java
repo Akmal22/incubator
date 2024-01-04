@@ -15,7 +15,7 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "CONSUMED_RESOURCES")
-public class ConsumedResourcesEntity {
+public class ConsumedResourcesEntity implements BaseDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "resourcesSequence")
     @SequenceGenerator(name = "resourcesSequence", sequenceName = "SEQ_RESOURCES", allocationSize = 1)

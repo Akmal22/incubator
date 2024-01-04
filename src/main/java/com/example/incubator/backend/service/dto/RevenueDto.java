@@ -6,9 +6,10 @@ import lombok.experimental.Accessors;
 
 @Data
 @Accessors(chain = true)
-public class RevenueDto {
+public class RevenueDto implements BaseDto {
+    private final String dataName = "revenue";
     private Long id;
-    private IncubatorProjectDto incubatorProjectDto;
+    private IncubatorProjectDto project;
     private Double leaseRevenue;
     private Double serviceRevenue;
     private Double sponsorshipRevenue;
