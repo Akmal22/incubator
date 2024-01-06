@@ -1,6 +1,5 @@
 package com.example.incubator.backend.entity.data;
 
-import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -16,13 +15,13 @@ import lombok.Data;
 @Data
 @Entity
 @Table(name = "REVENUE")
-public class RevenueEntity {
+public class RevenueEntity implements BaseDataEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "revenueSequence")
     @SequenceGenerator(name = "revenueSequence", sequenceName = "SEQ_REVENUE", allocationSize = 1)
     private Long id;
 
-    @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.EAGER)
+    @OneToOne(fetch = FetchType.EAGER)
     @JoinColumn(name = "project_id", referencedColumnName = "id")
     private IncubatorProjectEntity projectEntity;
 

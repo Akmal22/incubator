@@ -1,6 +1,6 @@
 package com.example.incubator.backend.service.dto.incubator;
 
-import com.example.incubator.backend.service.dto.country.CountryDto;
+import com.example.incubator.backend.service.dto.CountryDto;
 import com.example.incubator.backend.service.dto.user.UserDto;
 import lombok.Data;
 import lombok.experimental.Accessors;

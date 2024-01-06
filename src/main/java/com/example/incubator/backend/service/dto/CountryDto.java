@@ -1,4 +1,4 @@
-package com.example.incubator.backend.service.dto.country;
+package com.example.incubator.backend.service.dto;
 
 import lombok.Data;
 

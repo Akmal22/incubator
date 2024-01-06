@@ -50,7 +50,7 @@ public class ProjectForm extends FormLayout {
         incubator.setItemLabelGenerator(IncubatorDto::getIncubatorName);
 
         errorMessageLabel.getStyle().set("color", "Red");
-        add(name, incubator, startDate, endDate, getButtonsLayout());
+        add(name, incubator, startDate, endDate, errorMessageLabel, getButtonsLayout());
     }
 
     public Label getErrorMessageLabel() {

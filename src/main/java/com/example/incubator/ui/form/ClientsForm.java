@@ -57,7 +57,7 @@ public class ClientsForm extends FormLayout {
         accepted.setReadOnly(false);
         graduated.setReadOnly(false);
         failed.setReadOnly(false);
-        add(project, applications, accepted, graduated, failed, getButtonsLayout());
+        add(project, applications, accepted, graduated, failed, errorMessageLabel, getButtonsLayout());
     }
 
     public Label getErrorMessageLabel() {

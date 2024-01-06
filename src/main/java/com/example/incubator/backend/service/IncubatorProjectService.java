@@ -39,7 +39,7 @@ public class IncubatorProjectService {
         Optional<IncubatorProjectEntity> optionalIncubatorProjectEntity = incubatorProjectRepository.findByName(incubatorProjectDto.getName());
         if (optionalIncubatorProjectEntity.isPresent()) {
             log.error("Incubator project with name [{}] already exists", incubatorProjectDto.getName());
-            return new ServiceResult(false, "Incubator with given name already exists");
+            return new ServiceResult(false, "Project with given name already exists");
         }
         IncubatorProjectEntity incubatorProjectEntity = new IncubatorProjectEntity();
         incubatorProjectEntity.setName(incubatorProjectDto.getName());

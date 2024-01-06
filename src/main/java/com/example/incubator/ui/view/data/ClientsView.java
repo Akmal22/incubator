@@ -3,7 +3,7 @@ package com.example.incubator.ui.view.data;
 import com.example.incubator.backend.service.ClientsService;
 import com.example.incubator.backend.service.IncubatorProjectService;
 import com.example.incubator.backend.service.dto.ServiceResult;
-import com.example.incubator.backend.service.dto.clients.ClientsDto;
+import com.example.incubator.backend.service.dto.ClientsDto;
 import com.example.incubator.ui.MainLayout;
 import com.example.incubator.ui.form.ClientsForm;
 import com.example.incubator.ui.form.dto.EditClientsDto;
@@ -96,9 +96,9 @@ public class ClientsView extends VerticalLayout {
         EditClientsDto editClientsDto = event.getEditClientsDto();
         ServiceResult serviceResult;
         if (editClientsDto.getId() == null) {
-            serviceResult = clientsService.createClientsDto(convertEditClients(editClientsDto));
+            serviceResult = clientsService.createNewBIData(convertEditClients(editClientsDto));
         } else {
-            serviceResult = clientsService.updateClientsDto(convertEditClients(editClientsDto));
+            serviceResult = clientsService.updateBIData(convertEditClients(editClientsDto));
         }
 
         if (!serviceResult.isSuccess()) {
@@ -111,7 +111,8 @@ public class ClientsView extends VerticalLayout {
     }
 
     private void deleteClientsDto(ClientsForm.DeleteEvent event) {
-        clientsService.deleteClientDto(convertEditClients(event.getEditClientsDto()));
+        // todo user result of delete data
+        clientsService.deleteData(convertEditClients(event.getEditClientsDto()));
         updateClientsList();
         closeEditor();
     }
@@ -155,7 +156,7 @@ public class ClientsView extends VerticalLayout {
     private EditClientsDto convertClientsDto(ClientsDto clientsDto) {
         EditClientsDto editClientsDto = new EditClientsDto();
         editClientsDto.setId(clientsDto.getId());
-        editClientsDto.setProject(clientsDto.getIncubatorProjectDto());
+        editClientsDto.setProject(clientsDto.getProject());
         editClientsDto.setApplications(clientsDto.getApplications());
         editClientsDto.setAccepted(clientsDto.getAccepted());
         editClientsDto.setGraduated(clientsDto.getGraduated());
@@ -167,7 +168,7 @@ public class ClientsView extends VerticalLayout {
     private ClientsDto convertEditClients(EditClientsDto editClientsDto) {
         return new ClientsDto()
                 .setId(editClientsDto.getId())
-                .setIncubatorProjectDto(editClientsDto.getProject())
+                .setProject(editClientsDto.getProject())
                 .setApplications(editClientsDto.getApplications())
                 .setAccepted(editClientsDto.getAccepted())
                 .setGraduated(editClientsDto.getGraduated())

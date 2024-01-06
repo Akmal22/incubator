@@ -8,9 +8,13 @@ import com.example.incubator.ui.view.AboutUsView;
 import com.example.incubator.ui.view.ReportView;
 import com.example.incubator.ui.view.UsersView;
 import com.example.incubator.ui.view.data.ClientsView;
+import com.example.incubator.ui.view.data.ConsumedResourcesView;
 import com.example.incubator.ui.view.data.CountriesView;
+import com.example.incubator.ui.view.data.ExpenseView;
 import com.example.incubator.ui.view.data.IncubatorsView;
+import com.example.incubator.ui.view.data.InvestmentView;
 import com.example.incubator.ui.view.data.ProjectsView;
+import com.example.incubator.ui.view.data.RevenueView;
 import com.vaadin.flow.component.accordion.Accordion;
 import com.vaadin.flow.component.applayout.AppLayout;
 import com.vaadin.flow.component.applayout.DrawerToggle;
@@ -126,6 +130,10 @@ public class MainLayout extends AppLayout {
         verticalLayout.add(new RouterLink("Incubators", IncubatorsView.class));
         verticalLayout.add(new RouterLink("Projects", ProjectsView.class));
         verticalLayout.add(new RouterLink("Clients info", ClientsView.class));
+        verticalLayout.add(new RouterLink("Revenue info", RevenueView.class));
+        verticalLayout.add(new RouterLink("Investment info", InvestmentView.class));
+        verticalLayout.add(new RouterLink("Consumed resources", ConsumedResourcesView.class));
+        verticalLayout.add(new RouterLink("Expenses info", ExpenseView.class));
 
         accordion.add("Data", verticalLayout);
 
